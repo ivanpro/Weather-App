@@ -8,7 +8,9 @@
 
 import Foundation
 
-protocol FetchWeatherForLocationUseCaseInterface {}
+protocol FetchWeatherForLocationUseCaseInterface {
+    func execute(_ input: String)
+}
 
 final class FetchWeatherForLocationUseCase: UseCase<String>, FetchWeatherForLocationUseCaseInterface {
     var weatherRepository: WeatherRepositoryInterface

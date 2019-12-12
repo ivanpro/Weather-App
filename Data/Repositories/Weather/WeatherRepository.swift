@@ -28,18 +28,28 @@ protocol WeatherIconRepositoryDelegate: class {
 final class WeatherRepository: WeatherRepositoryInterface {
     weak var fetchDelegate: FetchWeatherRepositoryDelegate?
     weak var iconDelegate: WeatherIconRepositoryDelegate?
+    var client: WeatherClientInterface
 
     private let fetchQueue: DispatchQueue = DispatchQueue(label: "com.vitorll.weather_repository_fetch_queue", qos: .utility, attributes: .concurrent)
     private let iconQueue: DispatchQueue = DispatchQueue(label: "com.vitorll.weather_repository_icon_queue", qos: .utility, attributes: .concurrent)
+
+    init(client: WeatherClientInterface = WeatherClient()) {
+        self.client = client
+    }
 }
 
 extension WeatherRepository {
     func fetchWeatherForLocation(_ location: String) {
         fetchQueue.async {
             // Call client
-
-            DispatchQueue.main.async {
-                self.fetchDelegate?.fetchWeatherForLocationSuccess()
+            self.client.fetchWatherForLocation(location, onSuccess: { text in
+                DispatchQueue.main.async {
+                    self.fetchDelegate?.fetchWeatherForLocationSuccess()
+                }
+            }) { (errorCode, json, error) in
+                DispatchQueue.main.async {
+                    self.fetchDelegate?.fetchWeatherForLocationError()
+                }
             }
         }
     }

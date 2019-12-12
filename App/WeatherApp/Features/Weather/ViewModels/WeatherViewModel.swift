@@ -42,6 +42,7 @@ final class WeatherViewModel: WeatherViewModelInterface {
     func viewDidLoad() {
         // Fetch weather for current location if any saved
         // If no previous location saved, present search screen
+        fetchWeatherForLocationUseCase.execute("")
         delegate?.updateTemperatureLabel(with: "30ºC")
     }
 }
