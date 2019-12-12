@@ -8,9 +8,8 @@
 
 import Foundation
 
-class UseCase<Input, Output> {
-    @discardableResult
-    func execute(_ input: Input) -> Output {
+class UseCase<Input> {
+    func execute(_ input: Input) {
         fatalError("this should be overridden")
     }
 }

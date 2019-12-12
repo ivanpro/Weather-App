@@ -8,6 +8,39 @@
 
 import Foundation
 
-protocol WeatherRepositoryInterface {}
+protocol WeatherRepositoryInterface {
+    func fetchWeatherForLocation(_ location: String)
 
-final class WeatherRepository: WeatherRepositoryInterface {}
+    var fetchDelegate: FetchWeatherRepositoryDelegate? { get set }
+    var iconDelegate: WeatherIconRepositoryDelegate? { get set }
+}
+
+protocol FetchWeatherRepositoryDelegate: class {
+    func fetchWeatherForLocationSuccess()
+    func fetchWeatherForLocationError()
+}
+
+protocol WeatherIconRepositoryDelegate: class {
+    func fetchWeatherIconSuccess()
+    func fetchWeatherIconError()
+}
+
+final class WeatherRepository: WeatherRepositoryInterface {
+    weak var fetchDelegate: FetchWeatherRepositoryDelegate?
+    weak var iconDelegate: WeatherIconRepositoryDelegate?
+
+    private let fetchQueue: DispatchQueue = DispatchQueue(label: "com.vitorll.weather_repository_fetch_queue", qos: .utility, attributes: .concurrent)
+    private let iconQueue: DispatchQueue = DispatchQueue(label: "com.vitorll.weather_repository_icon_queue", qos: .utility, attributes: .concurrent)
+}
+
+extension WeatherRepository {
+    func fetchWeatherForLocation(_ location: String) {
+        fetchQueue.async {
+            // Call client
+
+            DispatchQueue.main.async {
+                self.fetchDelegate?.fetchWeatherForLocationSuccess()
+            }
+        }
+    }
+}

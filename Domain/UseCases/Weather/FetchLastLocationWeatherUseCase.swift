@@ -10,15 +10,14 @@ import Foundation
 
 protocol FetchLastLocationWeatherUseCaseInterface {}
 
-final class FetchLastLocationWeatherUseCase: UseCase<String, String>, FetchLastLocationWeatherUseCaseInterface {
+final class FetchLastLocationWeatherUseCase: UseCase<String>, FetchLastLocationWeatherUseCaseInterface {
     let weatherRepository: WeatherRepositoryInterface
 
     init(weatherRepository: WeatherRepositoryInterface = WeatherRepository()) {
         self.weatherRepository = weatherRepository
     }
 
-    override func execute(_ input: String) -> String {
+    override func execute(_ input: String) {
         // Ask client to fetch result
-        return ""
     }
 }

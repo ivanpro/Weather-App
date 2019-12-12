@@ -7,19 +7,17 @@
 //
 
 import Foundation
-import UIKit
 
 protocol GetWeatherIconForLocationUseCaseInterface {}
 
-final class GetWeatherIconForLocationUseCase: UseCase<String, UIImage>, GetWeatherIconForLocationUseCaseInterface {
+final class GetWeatherIconForLocationUseCase: UseCase<String>, GetWeatherIconForLocationUseCaseInterface {
     let weatherRepository: WeatherRepositoryInterface
 
     init(weatherRepository: WeatherRepositoryInterface = WeatherRepository()) {
         self.weatherRepository = weatherRepository
     }
 
-    override func execute(_ input: String) -> UIImage {
+    override func execute(_ input: String) {
         // Ask client to fetch result
-        return UIImage()
     }
 }
