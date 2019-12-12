@@ -10,8 +10,18 @@ import Foundation
 
 protocol WeatherViewModelInterface {
     func viewDidLoad()
+
+    var delegate: WeatherViewModelDelegate? { get set }
+}
+
+protocol WeatherViewModelDelegate: class {
+    func updateTemperatureLabel(with text: String)
 }
 
 final class WeatherViewModel: WeatherViewModelInterface {
-    func viewDidLoad() {}
+    weak var delegate: WeatherViewModelDelegate?
+
+    func viewDidLoad() {
+        delegate?.updateTemperatureLabel(with: "Hello Gumtree")
+    }
 }
