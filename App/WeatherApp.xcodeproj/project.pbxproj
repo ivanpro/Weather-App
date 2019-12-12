@@ -12,6 +12,11 @@
 		E7752BE723A23C5400D39364 /* WeatherCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7752BE623A23C5400D39364 /* WeatherCoordinator.swift */; };
 		E7752BED23A23D5900D39364 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7752BEC23A23D5900D39364 /* WeatherViewModel.swift */; };
 		E78AB02423A2411B005A4A16 /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78AB02323A2411B005A4A16 /* WeatherViewController.swift */; };
+		E78AB02823A25913005A4A16 /* FetchWeatherForLocationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78AB02723A25913005A4A16 /* FetchWeatherForLocationUseCase.swift */; };
+		E78AB02A23A2592C005A4A16 /* FetchLastLocationWeatherUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78AB02923A2592C005A4A16 /* FetchLastLocationWeatherUseCase.swift */; };
+		E78AB02C23A25944005A4A16 /* GetWeatherIconForLocationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78AB02B23A25944005A4A16 /* GetWeatherIconForLocationUseCase.swift */; };
+		E78AB03023A25EA8005A4A16 /* WeatherRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78AB02F23A25EA8005A4A16 /* WeatherRepository.swift */; };
+		E78AB03323A25F66005A4A16 /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78AB03223A25F66005A4A16 /* UseCase.swift */; };
 		E7AA702323A20ADD0076A9E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7AA702223A20ADD0076A9E2 /* AppDelegate.swift */; };
 		E7AA702923A20ADE0076A9E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7AA702823A20ADE0076A9E2 /* Assets.xcassets */; };
 		E7AA702F23A20ADE0076A9E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7AA702D23A20ADE0076A9E2 /* LaunchScreen.storyboard */; };
@@ -37,6 +42,11 @@
 		E7752BE623A23C5400D39364 /* WeatherCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCoordinator.swift; sourceTree = "<group>"; };
 		E7752BEC23A23D5900D39364 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
 		E78AB02323A2411B005A4A16 /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
+		E78AB02723A25913005A4A16 /* FetchWeatherForLocationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchWeatherForLocationUseCase.swift; sourceTree = "<group>"; };
+		E78AB02923A2592C005A4A16 /* FetchLastLocationWeatherUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLastLocationWeatherUseCase.swift; sourceTree = "<group>"; };
+		E78AB02B23A25944005A4A16 /* GetWeatherIconForLocationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetWeatherIconForLocationUseCase.swift; sourceTree = "<group>"; };
+		E78AB02F23A25EA8005A4A16 /* WeatherRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRepository.swift; sourceTree = "<group>"; };
+		E78AB03223A25F66005A4A16 /* UseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCase.swift; sourceTree = "<group>"; };
 		E7AA701F23A20ADD0076A9E2 /* WeatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7AA702223A20ADD0076A9E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7AA702823A20ADE0076A9E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -88,6 +98,7 @@
 		E7752BD923A20E8F00D39364 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				E78AB02D23A25E87005A4A16 /* Repositories */,
 			);
 			name = Data;
 			path = ../Data;
@@ -104,6 +115,7 @@
 		E7752BDB23A20E9000D39364 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				E78AB02523A258DD005A4A16 /* UseCases */,
 			);
 			name = Domain;
 			path = ../Domain;
@@ -192,6 +204,49 @@
 				E78AB02323A2411B005A4A16 /* WeatherViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		E78AB02523A258DD005A4A16 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				E78AB03123A25F4B005A4A16 /* Abstract UseCases */,
+				E78AB02623A258ED005A4A16 /* Weather */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		E78AB02623A258ED005A4A16 /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				E78AB02723A25913005A4A16 /* FetchWeatherForLocationUseCase.swift */,
+				E78AB02923A2592C005A4A16 /* FetchLastLocationWeatherUseCase.swift */,
+				E78AB02B23A25944005A4A16 /* GetWeatherIconForLocationUseCase.swift */,
+			);
+			path = Weather;
+			sourceTree = "<group>";
+		};
+		E78AB02D23A25E87005A4A16 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				E78AB02E23A25E8F005A4A16 /* Weather */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		E78AB02E23A25E8F005A4A16 /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				E78AB02F23A25EA8005A4A16 /* WeatherRepository.swift */,
+			);
+			path = Weather;
+			sourceTree = "<group>";
+		};
+		E78AB03123A25F4B005A4A16 /* Abstract UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				E78AB03223A25F66005A4A16 /* UseCase.swift */,
+			);
+			path = "Abstract UseCases";
 			sourceTree = "<group>";
 		};
 		E7AA701623A20ADD0076A9E2 = {
@@ -382,10 +437,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E78AB02A23A2592C005A4A16 /* FetchLastLocationWeatherUseCase.swift in Sources */,
 				E7752BED23A23D5900D39364 /* WeatherViewModel.swift in Sources */,
+				E78AB03023A25EA8005A4A16 /* WeatherRepository.swift in Sources */,
+				E78AB02C23A25944005A4A16 /* GetWeatherIconForLocationUseCase.swift in Sources */,
 				E78AB02423A2411B005A4A16 /* WeatherViewController.swift in Sources */,
+				E78AB03323A25F66005A4A16 /* UseCase.swift in Sources */,
 				E7752BE423A2348C00D39364 /* AppCoordinator.swift in Sources */,
 				E7752BE223A2344500D39364 /* Coordinator.swift in Sources */,
+				E78AB02823A25913005A4A16 /* FetchWeatherForLocationUseCase.swift in Sources */,
 				E7AA702323A20ADD0076A9E2 /* AppDelegate.swift in Sources */,
 				E7752BE723A23C5400D39364 /* WeatherCoordinator.swift in Sources */,
 			);
