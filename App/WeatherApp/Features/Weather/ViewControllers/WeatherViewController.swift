@@ -9,8 +9,17 @@
 import Foundation
 import UIKit
 
-final class WeatherViewController: UIViewController {
-    let viewModel: WeatherViewModelInterface
+protocol WeatherViewControllerInterface {}
+
+final class WeatherViewController: UIViewController, WeatherViewControllerInterface {
+    var viewModel: WeatherViewModelInterface
+
+    lazy var temperatureLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.textColor = .black
+        return label
+    }()
+
     init(viewModel: WeatherViewModelInterface) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -22,18 +31,40 @@ final class WeatherViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.delegate = self
         buildUI()
         viewModel.viewDidLoad()
     }
 }
 
 extension WeatherViewController {
-    // MARK: - Build UI
+    // MARK: - UI Setup
     func buildUI() {
         view.backgroundColor = .white
-        let label = UILabel(frame: CGRect(x: 100, y: 300, width: 400, height: 40))
-        label.text = "Hello Gumtree"
-        label.textColor = .black
-        view.addSubview(label)
+        addSubviews()
+        setConstraints()
+    }
+
+    func addSubviews() {
+        view.addSubview(temperatureLabel)
+    }
+
+    func setConstraints() {
+        setLabelConstraints()
+    }
+
+    func setLabelConstraints() {
+        temperatureLabel.frame = CGRect(x: 100, y: 300, width: 400, height: 40)
+    }
+}
+
+extension WeatherViewController {
+    // MARK: - UI Actions
+}
+
+extension WeatherViewController: WeatherViewModelDelegate {
+    // MARK: - WeatherViewModelDelegate
+    func updateTemperatureLabel(with text: String) {
+        temperatureLabel.text = text
     }
 }
