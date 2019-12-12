@@ -22,6 +22,8 @@ final class WeatherViewModel: WeatherViewModelInterface {
     weak var delegate: WeatherViewModelDelegate?
 
     func viewDidLoad() {
+        // Fetch weather for current location if any saved
+        // If no previous location saved, present search screen
         delegate?.updateTemperatureLabel(with: "Hello Gumtree")
     }
 }
