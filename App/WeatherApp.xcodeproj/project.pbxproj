@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -81,14 +81,50 @@
 			path = ../Pods;
 			sourceTree = "<group>";
 		};
+		E7752BD923A20E8F00D39364 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Data;
+			path = ../Data;
+			sourceTree = "<group>";
+		};
+		E7752BDA23A20E8F00D39364 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Entities;
+			path = ../Entities;
+			sourceTree = "<group>";
+		};
+		E7752BDB23A20E9000D39364 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Domain;
+			path = ../Domain;
+			sourceTree = "<group>";
+		};
+		E7752BDC23A20F4000D39364 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Common;
+			path = ../Common;
+			sourceTree = "<group>";
+		};
 		E7AA701623A20ADD0076A9E2 = {
 			isa = PBXGroup;
 			children = (
+				E7752BDC23A20F4000D39364 /* Common */,
+				E7752BD923A20E8F00D39364 /* Data */,
+				E7752BDB23A20E9000D39364 /* Domain */,
+				E7752BDA23A20E8F00D39364 /* Entities */,
+				5DAECA0AFD735FEA0C1E7012 /* Frameworks */,
+				A780D23F53AF7E92FAB8705B /* Pods */,
+				E7AA702023A20ADD0076A9E2 /* Products */,
 				E7AA702123A20ADD0076A9E2 /* WeatherApp */,
 				E7AA703823A20ADE0076A9E2 /* WeatherAppTests */,
-				E7AA702023A20ADD0076A9E2 /* Products */,
-				A780D23F53AF7E92FAB8705B /* Pods */,
-				5DAECA0AFD735FEA0C1E7012 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
