@@ -8,14 +8,30 @@
 
 import Foundation
 import UIKit
+import SnapKit
 
 protocol WeatherViewControllerInterface {}
+
+private struct Dimensions {
+    static let margin: CGFloat = 16.0
+}
 
 final class WeatherViewController: UIViewController, WeatherViewControllerInterface {
     var viewModel: WeatherViewModelInterface
 
+    lazy var locationLabel: UILabel = {
+        let label = UILabel(frame: .zero)
+        label.textAlignment = .center
+        label.font = UIFont(name: "Arial", size: 20.0)
+        label.textColor = .black
+        label.text = "Sydney, NSW"
+        return label
+    }()
+
     lazy var temperatureLabel: UILabel = {
         let label = UILabel(frame: .zero)
+        label.textAlignment = .center
+        label.font = UIFont(name: "Arial", size: 30.0)
         label.textColor = .black
         return label
     }()
@@ -46,15 +62,33 @@ extension WeatherViewController {
     }
 
     func addSubviews() {
+        view.addSubview(locationLabel)
         view.addSubview(temperatureLabel)
     }
 
     func setConstraints() {
-        setLabelConstraints()
+        setTemperatureLabelConstraints()
+        setLocationLabelConstraints()
     }
 
-    func setLabelConstraints() {
-        temperatureLabel.frame = CGRect(x: 100, y: 300, width: 400, height: 40)
+    func setLocationLabelConstraints() {
+        locationLabel.backgroundColor = .lightGray
+        locationLabel.snp.makeConstraints { make in
+            make.height.equalTo(60.0)
+            make.topMargin.equalTo(Dimensions.margin)
+            make.leadingMargin.equalTo(Dimensions.margin)
+            make.trailingMargin.equalTo(-Dimensions.margin)
+        }
+    }
+
+    func setTemperatureLabelConstraints() {
+        temperatureLabel.backgroundColor = .blue
+        temperatureLabel.snp.makeConstraints { make -> Void in
+            make.height.equalTo(100.0)
+            make.width.equalTo(100.0)
+            make.leadingMargin.equalTo(30.0)
+            make.top.equalTo(locationLabel.snp_bottomMargin).offset(Dimensions.margin)
+        }
     }
 }
 
