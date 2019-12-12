@@ -36,6 +36,12 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
         return label
     }()
 
+    lazy var weatherImage: UIImageView = {
+        let image = UIImageView()
+        image.backgroundColor = .clear
+        return image
+    }()
+
     init(viewModel: WeatherViewModelInterface) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -64,11 +70,13 @@ extension WeatherViewController {
     func addSubviews() {
         view.addSubview(locationLabel)
         view.addSubview(temperatureLabel)
+        view.addSubview(weatherImage)
     }
 
     func setConstraints() {
         setTemperatureLabelConstraints()
         setLocationLabelConstraints()
+        setWeatherImage()
     }
 
     func setLocationLabelConstraints() {
@@ -87,6 +95,16 @@ extension WeatherViewController {
             make.height.equalTo(100.0)
             make.width.equalTo(100.0)
             make.leadingMargin.equalTo(30.0)
+            make.top.equalTo(locationLabel.snp_bottomMargin).offset(Dimensions.margin)
+        }
+    }
+
+    func setWeatherImage() {
+        weatherImage.backgroundColor = .yellow
+        weatherImage.snp.makeConstraints { make in
+            make.height.width.equalTo(100.0)
+            make.trailingMargin.equalTo(-30.0)
+            make.leading.greaterThanOrEqualTo(temperatureLabel.snp_trailingMargin)
             make.top.equalTo(locationLabel.snp_bottomMargin).offset(Dimensions.margin)
         }
     }
