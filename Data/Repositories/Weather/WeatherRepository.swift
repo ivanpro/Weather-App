@@ -38,7 +38,11 @@ final class WeatherRepository: WeatherRepositoryInterface {
 extension WeatherRepository {
     func fetchWeatherForLocation(_ location: String) {
         self.client.fetchWatherForLocation("Sydney", onSuccess: { json in
-            print(json)
+            let weather = Weather(with: json)
+            print(weather?.detail?.description)
+            print(weather?.detail?.icon)
+            print(weather?.location?.city)
+            print(weather?.location?.country)
             self.fetchDelegate?.fetchWeatherForLocationSuccess()
         }) { (errorCode, json, error) in
             self.fetchDelegate?.fetchWeatherForLocationError()
