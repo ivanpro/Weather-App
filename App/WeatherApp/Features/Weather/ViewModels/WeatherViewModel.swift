@@ -10,6 +10,7 @@ import Foundation
 
 protocol WeatherViewModelInterface {
     func viewDidLoad()
+    func tryAgainPressed()
 
     var delegate: WeatherViewModelDelegate? { get set }
 }
@@ -17,6 +18,8 @@ protocol WeatherViewModelInterface {
 protocol WeatherViewModelDelegate: class {
     func updateTemperatureLabel(with text: String)
     func updateLocaleLabel(with text: String)
+
+    func requestFailed(with text: String)
 }
 
 final class WeatherViewModel: WeatherViewModelInterface {
@@ -43,12 +46,16 @@ final class WeatherViewModel: WeatherViewModelInterface {
     func viewDidLoad() {
         // Fetch weather for current location if any saved
         // If no previous location saved, present search screen
-        fetchWeatherForLocationUseCase.execute("Auckland")
+        fetchWeatherForLocationUseCase.execute("Porto Alegre")
         setUseCaseDelegates()
     }
 
     func setUseCaseDelegates() {
         fetchWeatherForLocationUseCase.delegate = self
+    }
+
+    func tryAgainPressed() {
+        fetchWeatherForLocationUseCase.execute("Sydney")
     }
 }
 
@@ -65,6 +72,6 @@ extension WeatherViewModel: FetchWeatherForLocationUseDelegate {
     }
 
     func failedWeatherResponseForLocation(errorMessage: String) {
-
+        delegate?.requestFailed(with: errorMessage)
     }
 }

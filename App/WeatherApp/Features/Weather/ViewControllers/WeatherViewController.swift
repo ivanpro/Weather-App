@@ -123,4 +123,24 @@ extension WeatherViewController: WeatherViewModelDelegate {
     func updateLocaleLabel(with text: String) {
         locationLabel.text = text
     }
+
+    func requestFailed(with text: String) {
+        presentErrorAlert(text)
+    }
+}
+
+extension WeatherViewController {
+    // MARK: Utility
+    func presentErrorAlert(_ message: String) {
+        let alert = UIAlertController(title: "Something went wrong", message: message, preferredStyle: UIAlertController.Style.alert)
+
+        let tryAgainHandler: ((UIAlertAction) -> Void)? = { [weak self] _ in
+            self?.viewModel.tryAgainPressed()
+        }
+
+        alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertAction.Style.default, handler: tryAgainHandler))
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel))
+
+        self.present(alert, animated: true, completion: nil)
+    }
 }
