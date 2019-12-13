@@ -16,8 +16,8 @@ protocol WeatherRepositoryInterface {
 }
 
 protocol FetchWeatherRepositoryDelegate: class {
-    func fetchWeatherForLocationSuccess()
-    func fetchWeatherForLocationError()
+    func fetchWeatherForLocationSuccess(weather: Weather)
+    func fetchWeatherForLocationError(errorMessage: String)
 }
 
 protocol WeatherIconRepositoryDelegate: class {
@@ -37,15 +37,20 @@ final class WeatherRepository: WeatherRepositoryInterface {
 
 extension WeatherRepository {
     func fetchWeatherForLocation(_ location: String) {
-        self.client.fetchWatherForLocation("Sydney", onSuccess: { json in
-            let weather = Weather(with: json)
-            print(weather?.detail?.description)
-            print(weather?.detail?.icon)
-            print(weather?.location?.city)
-            print(weather?.location?.country)
-            self.fetchDelegate?.fetchWeatherForLocationSuccess()
+        client.fetchWatherForLocation(location, onSuccess: { json in
+            guard let weather = Weather(with: json) else {
+                self.fetchDelegate?.fetchWeatherForLocationError(errorMessage: "Failed to parse Weather entity")
+                return
+            }
+
+            self.fetchDelegate?.fetchWeatherForLocationSuccess(weather: weather)
         }) { (errorCode, json, error) in
-            self.fetchDelegate?.fetchWeatherForLocationError()
+            var errorMessage = "Unknown error"
+            if let message = error?.localizedDescription {
+                errorMessage = "Request Failed: \(message))"
+            }
+
+            self.fetchDelegate?.fetchWeatherForLocationError(errorMessage: errorMessage)
         }
     }
 }
