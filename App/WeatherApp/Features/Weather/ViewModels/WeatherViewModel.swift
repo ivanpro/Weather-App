@@ -18,8 +18,9 @@ protocol WeatherViewModelInterface {
 protocol WeatherViewModelDelegate: class {
     func updateTemperatureLabel(with text: String)
     func updateLocaleLabel(with text: String)
-
     func requestFailed(with text: String)
+
+    func updateWeatherIcon(with imageData: Data)
 }
 
 final class WeatherViewModel: WeatherViewModelInterface {
@@ -52,6 +53,7 @@ final class WeatherViewModel: WeatherViewModelInterface {
 
     func setUseCaseDelegates() {
         fetchWeatherForLocationUseCase.delegate = self
+        getWeatherIconForLocationUseCase.delegate = self
     }
 
     func tryAgainPressed() {
@@ -62,6 +64,10 @@ final class WeatherViewModel: WeatherViewModelInterface {
 extension WeatherViewModel: FetchWeatherForLocationUseDelegate {
     // MARK: - FetchWeatherForLocationUseDelegate
     func successWeatherResponseForLocation(weahter: Weather) {
+        if let icon = weahter.detail?.icon {
+            getWeatherIconForLocationUseCase.execute(icon)
+        }
+
         if let city = weahter.location?.city, let country = weahter.location?.country {
             delegate?.updateLocaleLabel(with: "\(city) - \(country)")
         }
@@ -74,4 +80,13 @@ extension WeatherViewModel: FetchWeatherForLocationUseDelegate {
     func failedWeatherResponseForLocation(errorMessage: String) {
         delegate?.requestFailed(with: errorMessage)
     }
+}
+
+extension WeatherViewModel: GetWeatherIconForLocationUseCaseDelegate {
+    // MARK: - GetWeatherIconForLocationUseCaseDelegate
+    func successResponseForIcon(_ imageData: Data) {
+        delegate?.updateWeatherIcon(with: imageData)
+    }
+
+    func failedResponseForIcon(_ errorMessage: String) {}
 }

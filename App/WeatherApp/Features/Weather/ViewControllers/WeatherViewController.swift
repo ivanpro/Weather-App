@@ -127,6 +127,10 @@ extension WeatherViewController: WeatherViewModelDelegate {
     func requestFailed(with text: String) {
         presentErrorAlert(text)
     }
+
+    func updateWeatherIcon(with imageData: Data) {
+        weatherImage.image = UIImage(data: imageData)
+    }
 }
 
 extension WeatherViewController {

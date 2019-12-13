@@ -22,9 +22,9 @@ final class WeatherClient: WeatherClientInterface {
         let url = Endpoints.weather + location + WeatherClient.apiKey + Units.metric
 
         fetchQueue.async {
-            request(url).responseJSON { [weak self] response in
+            request(url).responseJSON { [weak self] dataResponse in
                 DispatchQueue.main.async {
-                    self?.parseResponse(response: response, onSuccess: onSuccess, onError: onError)
+                    self?.parseResponse(response: dataResponse, onSuccess: onSuccess, onError: onError)
                 }
             }
         }
@@ -33,25 +33,27 @@ final class WeatherClient: WeatherClientInterface {
     func fetchIconForWeather(_ iconId: String, onSuccess: ((Data) -> Void)?, onError: HttpErrorClosure?) {
         let url = Endpoints.icon + iconId + Endpoints.iconType
 
-        if let image = imageCache.image(withIdentifier: url),
-            let data = convertImageData(image) {
-
-            onSuccess?(data)
+        // Fetch image from cache first
+        if let imageData = fetchImageFromCache(for: url) {
+            onSuccess?(imageData)
             return
         }
 
         iconQueue.async {
-            request(url).responseImage { [weak self] response in
-                guard let image = response.result.value else {
-                    self?.parseErrorResponse(error: response.error?.localizedDescription, onError: onError)
+            request(url).responseImage { [weak self] dataResponse in
+                guard let image = dataResponse.result.value else {
+                    self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
                     return
                 }
 
-                self?.imageCache.add(image, withIdentifier: url)
-
                 guard let data = self?.convertImageData(image) else {
-                    self?.parseErrorResponse(error: response.error?.localizedDescription, onError: onError)
+                    self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
                     return
+                }
+
+                // Cache the image
+                if let request = dataResponse.request {
+                    self?.imageCache.add(image, for: request)
                 }
 
                 onSuccess?(data)
@@ -62,6 +64,14 @@ final class WeatherClient: WeatherClientInterface {
 
 extension WeatherClient {
     // MARK: - Helpers
+    func fetchImageFromCache(for requestUrl: String) -> Data? {
+        guard let url = URL(string: requestUrl),
+            let image = imageCache.image(for: URLRequest(url: url)),
+            let data = convertImageData(image) else { return nil}
+
+        return data
+    }
+
     func convertImageData(_ image: Image) -> Data? {
         return image.jpegData(compressionQuality: 70.0)
     }
