@@ -10,4 +10,4 @@ import Foundation
 
 public typealias JSONDictionary = [String: Any]
 typealias HttpSuccessClosure = ((_ responseDictionary: JSONDictionary?) -> Void)
-typealias HttpErrorClosure = ((_ statusCode: Int?, _ responseDictionary: JSONDictionary?, _ error: Error?) -> Void)
+typealias HttpErrorClosure = ((_ errorMessage: String) -> Void)
