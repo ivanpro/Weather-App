@@ -44,7 +44,8 @@ extension WeatherClient {
         DispatchQueue.main.async {
             guard response.error == nil else { return self.parseErrorResponse(response: response, onError: onError) }
 
-            guard let json = response.value as? JSONDictionary  else {
+            guard let data = response.data, let json = try? JSONSerialization.jsonObject(with: data, options: [.allowFragments]) as? JSONDictionary else {
+
                 let error = NSError(domain: "Failed to parse JSON object", code: 0, userInfo: nil)
                 onError?(0, nil, error)
                 return
@@ -54,8 +55,8 @@ extension WeatherClient {
         }
     }
 
-    func parseSuccessResponse(_ json: JSONDictionary, onSuccess: ((JSONDictionary) -> Void)?) {
-        onSuccess?(json)
+    func parseSuccessResponse(_ response: JSONDictionary, onSuccess: ((JSONDictionary) -> Void)?) {
+        onSuccess?(response)
     }
 
     func parseErrorResponse(response: DataResponse<Any>, onError: HttpErrorClosure?) {
