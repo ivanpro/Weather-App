@@ -9,5 +9,5 @@
 import Foundation
 
 protocol WeatherClientInterface {
-    func fetchWatherForLocation(_ location: String, onSuccess: ((_ text: String) -> Void)?, onError: HttpErrorClosure?)
+    func fetchWatherForLocation(_ location: String, onSuccess: ((_ json: JSONDictionary) -> Void)?, onError: HttpErrorClosure?)
 }
