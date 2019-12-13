@@ -119,4 +119,8 @@ extension WeatherViewController: WeatherViewModelDelegate {
     func updateTemperatureLabel(with text: String) {
         temperatureLabel.text = text
     }
+
+    func updateLocaleLabel(with text: String) {
+        locationLabel.text = text
+    }
 }
