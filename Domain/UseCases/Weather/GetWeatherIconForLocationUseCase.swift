@@ -8,16 +8,39 @@
 
 import Foundation
 
-protocol GetWeatherIconForLocationUseCaseInterface {}
+protocol GetWeatherIconForLocationUseCaseInterface {
+    func execute(_ input: String)
+
+    var delegate: GetWeatherIconForLocationUseCaseDelegate? { get set }
+}
+
+protocol GetWeatherIconForLocationUseCaseDelegate: class {
+    func successResponseForIcon(_ imageData: Data)
+    func failedResponseForIcon(_ errorMessage: String)
+}
 
 final class GetWeatherIconForLocationUseCase: UseCase<String>, GetWeatherIconForLocationUseCaseInterface {
-    let weatherRepository: WeatherRepositoryInterface
+    weak var delegate: GetWeatherIconForLocationUseCaseDelegate?
+    var weatherRepository: WeatherRepositoryInterface
 
     init(weatherRepository: WeatherRepositoryInterface = WeatherRepository()) {
         self.weatherRepository = weatherRepository
     }
 
     override func execute(_ input: String) {
-        // Ask client to fetch result
+        weatherRepository.iconDelegate = self
+        weatherRepository.fetchIconForWeather(input)
+    }
+}
+
+extension GetWeatherIconForLocationUseCase: WeatherIconRepositoryDelegate {
+    // MARK: - WeatherIconRepositoryDelegate
+
+    func fetchWeatherForLocationSuccess(_ image: Data) {
+        delegate?.successResponseForIcon(image)
+    }
+
+    func fetchWeatherIconError(_ errorMessage: String) {
+        delegate?.failedResponseForIcon(errorMessage)
     }
 }
