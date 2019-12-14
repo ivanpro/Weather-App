@@ -22,6 +22,7 @@ final class SearchCoordinator: SearchCoordinatorInterface {
 
     func start() {
         let viewController = SearchViewController(viewModel: viewModel)
+        viewController.title = "Search"
         navigationController.pushViewController(viewController, animated: true)
     }
 }

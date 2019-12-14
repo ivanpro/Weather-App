@@ -12,6 +12,10 @@ import SnapKit
 
 protocol WeatherViewControllerInterface {}
 
+private struct Theme {
+    static let color: UIColor = .darkGray
+}
+
 final class WeatherViewController: UIViewController, WeatherViewControllerInterface {
     var viewModel: WeatherViewModelInterface
 
@@ -37,16 +41,15 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
         return image
     }()
 
-    lazy var searchButton: UIButton = {
-        let button = UIButton(type: .roundedRect)
-        button.setTitle("Search", for: .normal)
-        button.addTarget(self, action: #selector(searchPressed), for: .touchUpInside)
+    lazy var searchButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchPressed))
+        button.tintColor = Theme.color
         return button
     }()
 
     lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .large)
-        activityIndicator.color = .green
+        activityIndicator.color = Theme.color
         activityIndicator.hidesWhenStopped = true
         return activityIndicator
     }()
@@ -77,7 +80,7 @@ extension WeatherViewController {
     }
 
     func addSubviews() {
-        view.addSubview(searchButton)
+        navigationItem.setRightBarButton(searchButton, animated: false)
         view.addSubview(locationLabel)
         view.addSubview(temperatureLabel)
         view.addSubview(weatherImage)
@@ -85,18 +88,10 @@ extension WeatherViewController {
     }
 
     func setConstraints() {
-        setSearchButtonConstraints()
         setTemperatureLabelConstraints()
         setLocationLabelConstraints()
         setWeatherImageConstraints()
         setActivityIndicatorConstraints()
-    }
-
-    func setSearchButtonConstraints() {
-        searchButton.snp.makeConstraints { make in
-            make.height.width.equalTo(100.0)
-            make.center.equalTo(view)
-        }
     }
 
     func setLocationLabelConstraints() {

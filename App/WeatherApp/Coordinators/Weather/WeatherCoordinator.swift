@@ -29,6 +29,7 @@ final class WeatherCoordinator: AppCoordinatorInterface {
     func start() {
         viewModel.coordinatorDelegate = self
         let viewController = WeatherViewController(viewModel: viewModel)
+        viewController.title = "Gumtree Weather"
         navigationController.pushViewController(viewController, animated: false)
     }
 }
