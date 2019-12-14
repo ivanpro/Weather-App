@@ -40,7 +40,6 @@ final class FetchWeatherForLocationUseCase: UseCase<String>, FetchWeatherForLoca
 
 extension FetchWeatherForLocationUseCase: FetchWeatherRepositoryDelegate {
     func fetchWeatherForLocationSuccess(weather: Weather) {
-        UserDefaults.standard.setValue(weather.location?.city, forKey: "lastSearch")
         delegate?.successWeatherResponseForLocation(weather)
     }
 
