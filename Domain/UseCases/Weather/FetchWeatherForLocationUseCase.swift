@@ -15,8 +15,8 @@ protocol FetchWeatherForLocationUseCaseInterface {
 }
 
 protocol FetchWeatherForLocationUseCaseDelegate: AnyObject {
-    func successWeatherResponseForLocation(weahter: Weather)
-    func failedWeatherResponseForLocation(errorMessage: String)
+    func successWeatherResponseForLocation(_ weather: Weather)
+    func failedWeatherResponseForLocation(_ errorMessage: String)
 }
 
 final class FetchWeatherForLocationUseCase: UseCase<String>, FetchWeatherForLocationUseCaseInterface {
@@ -36,10 +36,10 @@ final class FetchWeatherForLocationUseCase: UseCase<String>, FetchWeatherForLoca
 extension FetchWeatherForLocationUseCase: FetchWeatherRepositoryDelegate {
     func fetchWeatherForLocationSuccess(weather: Weather) {
         UserDefaults.standard.setValue(weather.location?.city, forKey: "lastSearch")
-        delegate?.successWeatherResponseForLocation(weahter: weather)
+        delegate?.successWeatherResponseForLocation(weather)
     }
 
     func fetchWeatherForLocationError(errorMessage: String) {
-        delegate?.failedWeatherResponseForLocation(errorMessage: errorMessage)
+        delegate?.failedWeatherResponseForLocation(errorMessage)
     }
 }

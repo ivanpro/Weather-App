@@ -15,7 +15,7 @@ protocol FetchLastLocationWeatherUseCaseInterface {
 }
 
 protocol FetchLastLocationWeatherUseCaseDelegate: AnyObject {
-    func successWeatherResponseForLocation(weahter: Weather)
+    func successWeatherResponseForLocation(weather: Weather)
     func failedWeatherResponseForLocation(errorMessage: String)
 }
 
@@ -34,11 +34,11 @@ final class FetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInte
 }
 
 extension FetchLastLocationWeatherUseCase: FetchWeatherForLocationUseCaseDelegate {
-    func successWeatherResponseForLocation(weahter: Weather) {
-        delegate?.successWeatherResponseForLocation(weahter: weahter)
+    func successWeatherResponseForLocation(_ weather: Weather) {
+        delegate?.successWeatherResponseForLocation(weather: weather)
     }
 
-    func failedWeatherResponseForLocation(errorMessage: String) {
+    func failedWeatherResponseForLocation(_ errorMessage: String) {
         delegate?.failedWeatherResponseForLocation(errorMessage: errorMessage)
     }
 }
