@@ -88,7 +88,12 @@ extension WeatherClient {
                 return
             }
 
-            self.parseSuccessResponse(json, onSuccess: onSuccess)
+            guard json.string(forKey: "cod") != "200", let message = json.string(forKey: "message") else {
+                self.parseSuccessResponse(json, onSuccess: onSuccess)
+                return
+            }
+
+            onError?(message)
         }
     }
 

@@ -28,8 +28,13 @@ final class FetchWeatherForLocationUseCase: UseCase<String>, FetchWeatherForLoca
     }
 
     override func execute(_ input: String) {
-        self.weatherRepository.fetchDelegate = self
-        weatherRepository.fetchWeatherForLocation(input)
+        guard let encoded = input.addingPercentEncoding(withAllowedCharacters: .alphanumerics) else {
+            delegate?.failedWeatherResponseForLocation("Failed to parse city name or zip code")
+            return
+        }
+
+        weatherRepository.fetchDelegate = self
+        weatherRepository.fetchWeatherForLocation(encoded)
     }
 }
 

@@ -18,7 +18,7 @@ protocol SearchViewModelInterface {
 
 protocol SearchCoordinatorDelegate: AnyObject {
     func fetchWeatherForLocationSuccessful(_ weather: Weather)
-    func fetchWeatherForLocationFailed()
+    func fetchWeatherForLocationFailed(_ errorMessage: String)
 }
 
 protocol SearchViewModelDelegate: AnyObject {}
@@ -59,6 +59,6 @@ extension SearchViewModel: FetchWeatherForLocationUseCaseDelegate {
     }
 
     func failedWeatherResponseForLocation(_ errorMessage: String) {
-        // delegate?.requestFailed(with: errorMessage)
+        coordinatorDelegate?.fetchWeatherForLocationFailed(errorMessage)
     }
 }

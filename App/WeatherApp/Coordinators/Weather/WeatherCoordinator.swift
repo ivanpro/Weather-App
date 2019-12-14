@@ -46,13 +46,16 @@ extension WeatherCoordinator: WeatherCoordinatorDelegate {
 }
 
 extension WeatherCoordinator: SearchCoordinatorDelegate {
+    // MARK: - SearchCoordinatorDelegate
     func fetchWeatherForLocationSuccessful(_ weather: Weather) {
         viewModel.loadWeather(weather)
         navigationController.popViewController(animated: true)
         children[.search] = nil
     }
 
-    func fetchWeatherForLocationFailed() {
-
+    func fetchWeatherForLocationFailed(_ errorMessage: String) {
+        navigationController.popViewController(animated: true)
+        children[.search] = nil
+        viewModel.searchFailed(errorMessage)
     }
 }

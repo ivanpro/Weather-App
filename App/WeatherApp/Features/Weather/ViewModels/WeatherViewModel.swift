@@ -12,7 +12,9 @@ protocol WeatherViewModelInterface {
     func viewDidLoad()
     func tryAgainPressed()
     func searchPressed()
+
     func loadWeather(_ weather: Weather)
+    func searchFailed(_ errorMessage: String)
 
     var delegate: WeatherViewModelDelegate? { get set }
     var coordinatorDelegate: WeatherCoordinatorDelegate? { get set }
@@ -47,8 +49,6 @@ final class WeatherViewModel: WeatherViewModelInterface {
     }
 
     func viewDidLoad() {
-        // Fetch weather for current location if any saved
-        // If no previous location saved, present search screen
         setUseCaseDelegates()
         requestUseCase()
     }
@@ -64,6 +64,7 @@ extension WeatherViewModel {
     func requestUseCase() {
         guard fetchLastLocationWeatherUseCase.execute() == true else {
             delegate?.stopAnimatingIndicator()
+            coordinatorDelegate?.presentSearchScreen()
             return
         }
 
@@ -76,6 +77,11 @@ extension WeatherViewModel {
     func loadWeather(_ weather: Weather) {
         delegate?.stopAnimatingIndicator()
         successWeatherResponseForLocation(weather: weather)
+    }
+
+    func searchFailed(_ errorMessage: String) {
+        delegate?.stopAnimatingIndicator()
+        delegate?.requestFailed(with: errorMessage)
     }
 }
 
@@ -94,7 +100,7 @@ extension WeatherViewModel: FetchLastLocationWeatherUseCaseDelegate {
     // MARK: - FetchLastLocationWeatherUseCaseDelegate
     func successWeatherResponseForLocation(weather weahter: Weather) {
         delegate?.stopAnimatingIndicator()
-        
+
         if let icon = weahter.detail?.icon {
             getWeatherIconForLocationUseCase.execute(icon)
         }
