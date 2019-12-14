@@ -39,5 +39,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Check the weather faster by using your current location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Check the weather faster by using your current location</string>
 </dict>
 </plist>

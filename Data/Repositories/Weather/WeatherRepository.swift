@@ -10,6 +10,7 @@ import Foundation
 
 protocol WeatherRepositoryInterface {
     func fetchWeatherForLocation(_ location: String)
+    func fetchWeatherForCoordinate(_ coordinate: Coordinate)
     func fetchIconForWeather(_ iconName: String)
 
     var fetchDelegate: FetchWeatherRepositoryDelegate? { get set }
@@ -39,12 +40,15 @@ final class WeatherRepository: WeatherRepositoryInterface {
 extension WeatherRepository {
     func fetchWeatherForLocation(_ location: String) {
         client.fetchWatherForLocation(location, onSuccess: { [weak self] json in
-            guard let weather = Weather(with: json) else {
-                self?.fetchDelegate?.fetchWeatherForLocationError(errorMessage: "Failed to parse Weather entity")
-                return
-            }
+            self?.parseSuccessfulRequest(json)
+        }) { [weak self] errorMessage in
+            self?.fetchDelegate?.fetchWeatherForLocationError(errorMessage: errorMessage)
+        }
+    }
 
-            self?.fetchDelegate?.fetchWeatherForLocationSuccess(weather: weather)
+    func fetchWeatherForCoordinate(_ coordinate: Coordinate) {
+        client.fetchWatherForCoordinates(coordinate.latitude, longitude: coordinate.longitude, onSuccess: { [weak self] json in
+            self?.parseSuccessfulRequest(json)
         }) { [weak self] errorMessage in
             self?.fetchDelegate?.fetchWeatherForLocationError(errorMessage: errorMessage)
         }
@@ -56,5 +60,18 @@ extension WeatherRepository {
         }) { [weak self] errorMessage in
             self?.iconDelegate?.fetchWeatherIconError(errorMessage)
         }
+    }
+}
+
+extension WeatherRepository {
+    // MARK: - Helper
+    func parseSuccessfulRequest(_ json: JSONDictionary) {
+        guard let weather = Weather(with: json) else {
+            fetchDelegate?.fetchWeatherForLocationError(errorMessage: "Failed to parse Weather entity")
+            return
+        }
+
+        UserDefaults.standard.setValue(weather.location?.city, forKey: "lastSearch")
+        fetchDelegate?.fetchWeatherForLocationSuccess(weather: weather)
     }
 }
