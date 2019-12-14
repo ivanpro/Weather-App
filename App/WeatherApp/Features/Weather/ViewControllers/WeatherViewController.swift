@@ -20,7 +20,6 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
         label.textAlignment = .center
         label.font = UIFont(name: "Arial", size: 20.0)
         label.textColor = .black
-        label.text = "Sydney, NSW"
         return label
     }()
 

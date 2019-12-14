@@ -20,7 +20,7 @@ protocol FetchLastLocationWeatherUseCaseDelegate: AnyObject {
 }
 
 final class FetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface {
-    let fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
+    var fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
     weak var delegate: FetchLastLocationWeatherUseCaseDelegate?
 
     init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface = FetchWeatherForLocationUseCase()) {
@@ -29,6 +29,7 @@ final class FetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInte
 
     func execute() {
         guard let lastSearchedLocation = UserDefaults.standard.string(forKey: "lastSearch") else { return }
+        fetchWeatherForLocationUseCase.delegate = self
         fetchWeatherForLocationUseCase.execute(lastSearchedLocation)
     }
 }
