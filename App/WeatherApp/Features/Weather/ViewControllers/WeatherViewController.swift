@@ -42,6 +42,13 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
         return image
     }()
 
+    lazy var searchButton: UIButton = {
+        let button = UIButton(type: .roundedRect)
+        button.setTitle("Search", for: .normal)
+        button.addTarget(self, action: #selector(didTapSearch), for: .touchUpInside)
+        return button
+    }()
+
     init(viewModel: WeatherViewModelInterface) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -68,15 +75,24 @@ extension WeatherViewController {
     }
 
     func addSubviews() {
+        view.addSubview(searchButton)
         view.addSubview(locationLabel)
         view.addSubview(temperatureLabel)
         view.addSubview(weatherImage)
     }
 
     func setConstraints() {
+        setSearchButtonConstraints()
         setTemperatureLabelConstraints()
         setLocationLabelConstraints()
         setWeatherImage()
+    }
+
+    func setSearchButtonConstraints() {
+        searchButton.snp.makeConstraints { make in
+            make.height.width.equalTo(100.0)
+            make.center.equalTo(view)
+        }
     }
 
     func setLocationLabelConstraints() {
@@ -112,6 +128,11 @@ extension WeatherViewController {
 
 extension WeatherViewController {
     // MARK: - UI Actions
+
+    @objc
+    func didTapSearch() {
+        viewModel.viewDidLoad()
+    }
 }
 
 extension WeatherViewController: WeatherViewModelDelegate {
