@@ -14,13 +14,15 @@ protocol SearchViewControllerInterface {}
 final class SearchViewController: UIViewController, SearchViewControllerInterface {
     var viewModel: SearchViewModelInterface
 
-    lazy var searchTextView: UITextView = {
-        let textView = UITextView()
-        textView.delegate = self
-        textView.backgroundColor = .lightGray
-        textView.font = UIFont(name: "Arial", size: 22.0)
-        textView.keyboardDismissMode = .onDrag
-        return textView
+    lazy var searchTextField: UITextField = {
+        let textField = UITextField()
+        textField.delegate = self
+        textField.placeholder = "Enter a City or Zip code"
+        textField.backgroundColor = .lightGray
+        textField.enablesReturnKeyAutomatically = true
+        textField.returnKeyType = .search
+        textField.font = UIFont(name: "Arial", size: 22.0)
+        return textField
     }()
 
     init(viewModel: SearchViewModelInterface) {
@@ -34,13 +36,13 @@ final class SearchViewController: UIViewController, SearchViewControllerInterfac
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        viewModel.delegate = self
+        viewModel.delegate = self
         buildUI()
         viewModel.viewDidLoad()
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        searchTextView.becomeFirstResponder()
+        searchTextField.becomeFirstResponder()
     }
 }
 
@@ -53,15 +55,15 @@ extension SearchViewController {
     }
 
     func addSubviews() {
-        view.addSubview(searchTextView)
+        view.addSubview(searchTextField)
     }
 
     func setConstraints() {
-        setSearchTextViewConstraints()
+        setSearchTextFieldConstraints()
     }
 
-    func setSearchTextViewConstraints() {
-        searchTextView.snp.makeConstraints { make in
+    func setSearchTextFieldConstraints() {
+        searchTextField.snp.makeConstraints { make in
             make.height.equalTo(40.0)
             make.topMargin.equalTo(Dimensions.margin * 2)
             make.leadingMargin.equalTo(Dimensions.margin * 2)
@@ -70,6 +72,13 @@ extension SearchViewController {
     }
 }
 
-extension SearchViewController: UITextViewDelegate {
+extension SearchViewController: SearchViewModelDelegate {
+    // MARK: - SearchViewModelDelegate
+}
 
+extension SearchViewController: UITextFieldDelegate {
+    // MARK: - UITextFieldDelegate
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        viewModel.textFieldShouldReturn(textField.text)
+    }
 }
