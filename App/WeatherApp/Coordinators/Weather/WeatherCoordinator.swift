@@ -35,11 +35,23 @@ final class WeatherCoordinator: AppCoordinatorInterface {
 
 extension WeatherCoordinator: WeatherCoordinatorDelegate {
     func presentSearchScreen() {
-        // Create serach cooridnator and start it
         let viewModel = SearchViewModel()
+        viewModel.coordinatorDelegate = self
         let coordinator = SearchCoordinator(navigationController: navigationController, viewModel: viewModel)
         coordinator.start()
 
         children[.search] = coordinator
+    }
+}
+
+extension WeatherCoordinator: SearchCoordinatorDelegate {
+    func fetchWeatherForLocationSuccessful(_ weather: Weather) {
+        viewModel.loadWeather(weather)
+        navigationController.popViewController(animated: true)
+        children[.search] = nil
+    }
+
+    func fetchWeatherForLocationFailed() {
+
     }
 }

@@ -12,6 +12,7 @@ protocol WeatherViewModelInterface {
     func viewDidLoad()
     func tryAgainPressed()
     func searchPressed()
+    func loadWeather(_ weather: Weather)
 
     var delegate: WeatherViewModelDelegate? { get set }
     var coordinatorDelegate: WeatherCoordinatorDelegate? { get set }
@@ -36,13 +37,8 @@ final class WeatherViewModel: WeatherViewModelInterface {
     var fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface
     var getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCaseInterface
 
-    convenience init() {
-        self.init(fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCase(),
-                  getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCase())
-    }
-
-    init(fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface,
-         getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCaseInterface) {
+    init(fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface = FetchLastLocationWeatherUseCase(),
+         getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCaseInterface = GetWeatherIconForLocationUseCase()) {
         self.fetchLastLocationWeatherUseCase = fetchLastLocationWeatherUseCase
         self.getWeatherIconForLocationUseCase = getWeatherIconForLocationUseCase
     }
@@ -61,6 +57,13 @@ final class WeatherViewModel: WeatherViewModelInterface {
 }
 
 extension WeatherViewModel {
+    // MARK: - Coordinator Actions
+    func loadWeather(_ weather: Weather) {
+        successWeatherResponseForLocation(weather: weather)
+    }
+}
+
+extension WeatherViewModel {
     // MARK: - ViewController Actions
     func tryAgainPressed() {
         fetchLastLocationWeatherUseCase.execute()
@@ -73,7 +76,7 @@ extension WeatherViewModel {
 
 extension WeatherViewModel: FetchLastLocationWeatherUseCaseDelegate {
     // MARK: - FetchLastLocationWeatherUseCaseDelegate
-    func successWeatherResponseForLocation(weahter: Weather) {
+    func successWeatherResponseForLocation(weather weahter: Weather) {
         if let icon = weahter.detail?.icon {
             getWeatherIconForLocationUseCase.execute(icon)
         }
