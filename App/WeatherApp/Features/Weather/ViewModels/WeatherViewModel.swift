@@ -11,11 +11,13 @@ import Foundation
 protocol WeatherViewModelInterface {
     func viewDidLoad()
     func tryAgainPressed()
+    func searchPressed()
 
     var delegate: WeatherViewModelDelegate? { get set }
+    var coordinatorDelegate: WeatherCoordinatorDelegate? { get set }
 }
 
-protocol WeatherViewModelDelegate: class {
+protocol WeatherViewModelDelegate: AnyObject {
     func updateTemperatureLabel(with text: String)
     func updateLocaleLabel(with text: String)
     func requestFailed(with text: String)
@@ -23,23 +25,24 @@ protocol WeatherViewModelDelegate: class {
     func updateWeatherIcon(with imageData: Data)
 }
 
+protocol WeatherCoordinatorDelegate: AnyObject {
+    func presentSearchScreen()
+}
+
 final class WeatherViewModel: WeatherViewModelInterface {
     weak var delegate: WeatherViewModelDelegate?
+    weak var coordinatorDelegate: WeatherCoordinatorDelegate?
 
-    var fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
     var fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface
     var getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCaseInterface
 
     convenience init() {
-        self.init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCase(),
-                  fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCase(),
+        self.init(fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCase(),
                   getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCase())
     }
 
-    init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface,
-         fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface,
+    init(fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface,
          getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCaseInterface) {
-        self.fetchWeatherForLocationUseCase = fetchWeatherForLocationUseCase
         self.fetchLastLocationWeatherUseCase = fetchLastLocationWeatherUseCase
         self.getWeatherIconForLocationUseCase = getWeatherIconForLocationUseCase
     }
@@ -47,22 +50,29 @@ final class WeatherViewModel: WeatherViewModelInterface {
     func viewDidLoad() {
         // Fetch weather for current location if any saved
         // If no previous location saved, present search screen
-        fetchWeatherForLocationUseCase.execute("Porto Alegre")
         setUseCaseDelegates()
+        fetchLastLocationWeatherUseCase.execute()
     }
 
     func setUseCaseDelegates() {
-        fetchWeatherForLocationUseCase.delegate = self
+        fetchLastLocationWeatherUseCase.delegate = self
         getWeatherIconForLocationUseCase.delegate = self
-    }
-
-    func tryAgainPressed() {
-        fetchWeatherForLocationUseCase.execute("Sydney")
     }
 }
 
-extension WeatherViewModel: FetchWeatherForLocationUseDelegate {
-    // MARK: - FetchWeatherForLocationUseDelegate
+extension WeatherViewModel {
+    // MARK: - ViewController Actions
+    func tryAgainPressed() {
+        fetchLastLocationWeatherUseCase.execute()
+    }
+
+    func searchPressed() {
+        coordinatorDelegate?.presentSearchScreen()
+    }
+}
+
+extension WeatherViewModel: FetchLastLocationWeatherUseCaseDelegate {
+    // MARK: - FetchLastLocationWeatherUseCaseDelegate
     func successWeatherResponseForLocation(weahter: Weather) {
         if let icon = weahter.detail?.icon {
             getWeatherIconForLocationUseCase.execute(icon)

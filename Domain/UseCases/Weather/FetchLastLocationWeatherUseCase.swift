@@ -8,16 +8,37 @@
 
 import Foundation
 
-protocol FetchLastLocationWeatherUseCaseInterface {}
+protocol FetchLastLocationWeatherUseCaseInterface {
+    func execute()
 
-final class FetchLastLocationWeatherUseCase: UseCase<String>, FetchLastLocationWeatherUseCaseInterface {
-    let weatherRepository: WeatherRepositoryInterface
+    var delegate: FetchLastLocationWeatherUseCaseDelegate? { get set }
+}
 
-    init(weatherRepository: WeatherRepositoryInterface = WeatherRepository()) {
-        self.weatherRepository = weatherRepository
+protocol FetchLastLocationWeatherUseCaseDelegate: AnyObject {
+    func successWeatherResponseForLocation(weahter: Weather)
+    func failedWeatherResponseForLocation(errorMessage: String)
+}
+
+final class FetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface {
+    let fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
+    weak var delegate: FetchLastLocationWeatherUseCaseDelegate?
+
+    init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface = FetchWeatherForLocationUseCase()) {
+        self.fetchWeatherForLocationUseCase = fetchWeatherForLocationUseCase
     }
 
-    override func execute(_ input: String) {
-        // Ask client to fetch result
+    func execute() {
+        guard let lastSearchedLocation = UserDefaults.standard.string(forKey: "lastSearch") else { return }
+        fetchWeatherForLocationUseCase.execute(lastSearchedLocation)
+    }
+}
+
+extension FetchLastLocationWeatherUseCase: FetchWeatherForLocationUseCaseDelegate {
+    func successWeatherResponseForLocation(weahter: Weather) {
+        delegate?.successWeatherResponseForLocation(weahter: weahter)
+    }
+
+    func failedWeatherResponseForLocation(errorMessage: String) {
+        delegate?.failedWeatherResponseForLocation(errorMessage: errorMessage)
     }
 }

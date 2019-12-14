@@ -12,10 +12,6 @@ import SnapKit
 
 protocol WeatherViewControllerInterface {}
 
-private struct Dimensions {
-    static let margin: CGFloat = 16.0
-}
-
 final class WeatherViewController: UIViewController, WeatherViewControllerInterface {
     var viewModel: WeatherViewModelInterface
 
@@ -45,7 +41,7 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
     lazy var searchButton: UIButton = {
         let button = UIButton(type: .roundedRect)
         button.setTitle("Search", for: .normal)
-        button.addTarget(self, action: #selector(didTapSearch), for: .touchUpInside)
+        button.addTarget(self, action: #selector(searchPressed), for: .touchUpInside)
         return button
     }()
 
@@ -130,8 +126,8 @@ extension WeatherViewController {
     // MARK: - UI Actions
 
     @objc
-    func didTapSearch() {
-        viewModel.viewDidLoad()
+    func searchPressed() {
+        viewModel.searchPressed()
     }
 }
 
@@ -166,6 +162,6 @@ extension WeatherViewController {
         alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertAction.Style.default, handler: tryAgainHandler))
         alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel))
 
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 }
