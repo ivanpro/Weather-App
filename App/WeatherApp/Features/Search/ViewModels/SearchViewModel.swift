@@ -42,7 +42,6 @@ extension SearchViewModel {
     func textFieldDidEndEditing(_ text: String?) {
         guard let text = text else { return }
         fetchWeatherForLocationUseCase.execute(text)
-        print(text)
     }
 
     func textFieldShouldReturn(_ text: String?) -> Bool {

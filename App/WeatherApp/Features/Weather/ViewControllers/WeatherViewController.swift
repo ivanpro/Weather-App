@@ -47,6 +47,12 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
         return button
     }()
 
+    lazy var gpsButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(gpsPressed))
+        button.tintColor = Theme.color
+        return button
+    }()
+
     lazy var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(style: .large)
         activityIndicator.color = Theme.color
@@ -69,6 +75,11 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
         buildUI()
         viewModel.viewDidLoad()
     }
+
+    override func viewDidDisappear(_ animated: Bool) {
+//        viewModel.viewDidDisappear()
+        super.viewDidDisappear(animated)
+    }
 }
 
 extension WeatherViewController {
@@ -81,6 +92,7 @@ extension WeatherViewController {
 
     func addSubviews() {
         navigationItem.setRightBarButton(searchButton, animated: false)
+        navigationItem.setLeftBarButton(gpsButton, animated: false)
         view.addSubview(locationLabel)
         view.addSubview(temperatureLabel)
         view.addSubview(weatherImage)
@@ -139,6 +151,11 @@ extension WeatherViewController {
         viewModel.searchPressed()
     }
 
+    @objc
+    func gpsPressed() {
+        viewModel.gpsPressed()
+    }
+
     func startAnimatingIndicator() {
         activityIndicator.startAnimating()
     }
@@ -158,26 +175,33 @@ extension WeatherViewController: WeatherViewModelDelegate {
         locationLabel.text = text
     }
 
-    func requestFailed(with text: String) {
-        presentErrorAlert(text)
-    }
-
     func updateWeatherIcon(with imageData: Data) {
         weatherImage.image = UIImage(data: imageData)
+    }
+
+    func requestFailed(with text: String) {
+        presentErrorAlert(text, withHandler: true)
+    }
+
+    func failedToLocateUser(_ errorMessage: String) {
+        presentErrorAlert(errorMessage)
     }
 }
 
 extension WeatherViewController {
     // MARK: Utility
-    func presentErrorAlert(_ message: String) {
+    func presentErrorAlert(_ message: String, withHandler: Bool = false) {
         let alert = UIAlertController(title: "Something went wrong", message: message, preferredStyle: UIAlertController.Style.alert)
 
-        let tryAgainHandler: ((UIAlertAction) -> Void)? = { [weak self] _ in
-            self?.viewModel.tryAgainPressed()
+        if withHandler {
+            let tryAgainHandler: ((UIAlertAction) -> Void)? = { [weak self] _ in
+                self?.viewModel.tryAgainPressed()
+            }
+
+            alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertAction.Style.default, handler: tryAgainHandler))
         }
 
-        alert.addAction(UIAlertAction(title: "Try Again", style: UIAlertAction.Style.default, handler: tryAgainHandler))
-        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel))
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel))
 
         present(alert, animated: true, completion: nil)
     }

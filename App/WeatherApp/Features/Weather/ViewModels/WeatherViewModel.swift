@@ -7,11 +7,14 @@
 //
 
 import Foundation
+import CoreLocation
 
 protocol WeatherViewModelInterface {
     func viewDidLoad()
+    func viewDidDisappear()
     func tryAgainPressed()
     func searchPressed()
+    func gpsPressed()
 
     func loadWeather(_ weather: Weather)
     func searchFailed(_ errorMessage: String)
@@ -24,6 +27,7 @@ protocol WeatherViewModelDelegate: AnyObject {
     func updateTemperatureLabel(with text: String)
     func updateLocaleLabel(with text: String)
     func requestFailed(with text: String)
+    func failedToLocateUser(_ errorMessage: String)
 
     func startAnimatingIndicator()
     func stopAnimatingIndicator()
@@ -39,13 +43,18 @@ final class WeatherViewModel: WeatherViewModelInterface {
     weak var delegate: WeatherViewModelDelegate?
     weak var coordinatorDelegate: WeatherCoordinatorDelegate?
 
+    var cancelLocationHandler: (() -> Void)?
+
     var fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface
     var getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCaseInterface
+    var currentUserLocationUseCase: CurrentUserLocationUseCaseInterface
 
     init(fetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface = FetchLastLocationWeatherUseCase(),
-         getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCaseInterface = GetWeatherIconForLocationUseCase()) {
+         getWeatherIconForLocationUseCase: GetWeatherIconForLocationUseCaseInterface = GetWeatherIconForLocationUseCase(),
+         currentUserLocationUseCase: CurrentUserLocationUseCaseInterface = CurrentUserLocationUseCase()) {
         self.fetchLastLocationWeatherUseCase = fetchLastLocationWeatherUseCase
         self.getWeatherIconForLocationUseCase = getWeatherIconForLocationUseCase
+        self.currentUserLocationUseCase = currentUserLocationUseCase
     }
 
     func viewDidLoad() {
@@ -53,9 +62,14 @@ final class WeatherViewModel: WeatherViewModelInterface {
         requestUseCase()
     }
 
+    func viewDidDisappear() {
+        cancelLocationHandler?()
+    }
+
     func setUseCaseDelegates() {
         fetchLastLocationWeatherUseCase.delegate = self
         getWeatherIconForLocationUseCase.delegate = self
+        currentUserLocationUseCase.delegate = self
     }
 }
 
@@ -94,6 +108,10 @@ extension WeatherViewModel {
     func searchPressed() {
         coordinatorDelegate?.presentSearchScreen()
     }
+
+    func gpsPressed() {
+        cancelLocationHandler = currentUserLocationUseCase.execute()
+    }
 }
 
 extension WeatherViewModel: FetchLastLocationWeatherUseCaseDelegate {
@@ -126,4 +144,14 @@ extension WeatherViewModel: GetWeatherIconForLocationUseCaseDelegate {
     }
 
     func failedResponseForIcon(_ errorMessage: String) {}
+}
+
+extension WeatherViewModel: CurrentUserLocationUseCaseDelegate {
+    func weatherForUserLocation(_ weather: Weather) {
+        loadWeather(weather)
+    }
+
+    func failedToAcquireUserLocation(errorMessage: String) {
+        delegate?.failedToLocateUser(errorMessage)
+    }
 }
