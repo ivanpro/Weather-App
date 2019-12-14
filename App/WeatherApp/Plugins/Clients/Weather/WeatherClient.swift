@@ -19,8 +19,16 @@ final class WeatherClient: WeatherClientInterface {
     private let iconQueue: DispatchQueue = DispatchQueue(label: "com.vitorll.weather_repository_icon_queue", qos: .utility, attributes: .concurrent)
 
     func fetchWatherForLocation(_ location: String, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
-        let url = Endpoints.weather + location + WeatherClient.apiKey + Units.metric
+        let url = String(format: Endpoints.weather, location)
+        fetchWeather(for: url, onSuccess: onSuccess, onError: onError)
+    }
 
+    func fetchWatherForCoordinates(_ latitude: Double, longitude: Double, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
+        let url = String(format: Endpoints.coordinate, latitude, longitude)
+        fetchWeather(for: url, onSuccess: onSuccess, onError: onError)
+    }
+
+    func fetchWeather(for url: String, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
         fetchQueue.async {
             request(url).responseJSON { [weak self] dataResponse in
                 DispatchQueue.main.async {
@@ -31,7 +39,7 @@ final class WeatherClient: WeatherClientInterface {
     }
 
     func fetchIconForWeather(_ iconId: String, onSuccess: ((Data) -> Void)?, onError: HttpErrorClosure?) {
-        let url = Endpoints.icon + iconId + Endpoints.iconType
+        let url = String(format: Endpoints.icon, iconId)
 
         // Fetch image from cache first
         if let imageData = fetchImageFromCache(for: url) {
