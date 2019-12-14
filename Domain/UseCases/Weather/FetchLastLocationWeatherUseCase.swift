@@ -9,7 +9,7 @@
 import Foundation
 
 protocol FetchLastLocationWeatherUseCaseInterface {
-    func execute()
+    func execute() -> Bool
 
     var delegate: FetchLastLocationWeatherUseCaseDelegate? { get set }
 }
@@ -19,7 +19,7 @@ protocol FetchLastLocationWeatherUseCaseDelegate: AnyObject {
     func failedWeatherResponseForLocation(errorMessage: String)
 }
 
-final class FetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInterface {
+final class FetchLastLocationWeatherUseCase: VoidUseCase<Bool>, FetchLastLocationWeatherUseCaseInterface {
     var fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
     weak var delegate: FetchLastLocationWeatherUseCaseDelegate?
 
@@ -27,10 +27,11 @@ final class FetchLastLocationWeatherUseCase: FetchLastLocationWeatherUseCaseInte
         self.fetchWeatherForLocationUseCase = fetchWeatherForLocationUseCase
     }
 
-    func execute() {
-        guard let lastSearchedLocation = UserDefaults.standard.string(forKey: "lastSearch") else { return }
+    override func execute() -> Bool {
+        guard let lastSearchedLocation = UserDefaults.standard.string(forKey: "lastSearch") else { return false }
         fetchWeatherForLocationUseCase.delegate = self
         fetchWeatherForLocationUseCase.execute(lastSearchedLocation)
+        return true
     }
 }
 

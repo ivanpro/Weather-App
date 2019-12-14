@@ -13,3 +13,9 @@ class UseCase<Input> {
         fatalError("this should be overridden")
     }
 }
+
+class VoidUseCase<Output> {
+    func execute() -> Output {
+        fatalError("this should be overridden")
+    }
+}
