@@ -16,12 +16,12 @@ protocol WeatherRepositoryInterface {
     var iconDelegate: WeatherIconRepositoryDelegate? { get set }
 }
 
-protocol FetchWeatherRepositoryDelegate: class {
+protocol FetchWeatherRepositoryDelegate: AnyObject {
     func fetchWeatherForLocationSuccess(weather: Weather)
     func fetchWeatherForLocationError(errorMessage: String)
 }
 
-protocol WeatherIconRepositoryDelegate: class {
+protocol WeatherIconRepositoryDelegate: AnyObject {
     func fetchWeatherForLocationSuccess(_ image: Data)
     func fetchWeatherIconError(_ errorMessage: String)
 }

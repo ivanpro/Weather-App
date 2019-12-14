@@ -27,12 +27,19 @@ final class WeatherCoordinator: AppCoordinatorInterface {
     }
 
     func start() {
+        viewModel.coordinatorDelegate = self
         let viewController = WeatherViewController(viewModel: viewModel)
         navigationController.pushViewController(viewController, animated: false)
     }
 }
 
-extension WeatherCoordinator {
-    func presentSearchScreen() {}
-    func presentRecentScreen() {}
+extension WeatherCoordinator: WeatherCoordinatorDelegate {
+    func presentSearchScreen() {
+        // Create serach cooridnator and start it
+        let viewModel = SearchViewModel()
+        let coordinator = SearchCoordinator(navigationController: navigationController, viewModel: viewModel)
+        coordinator.start()
+
+        children[.search] = coordinator
+    }
 }

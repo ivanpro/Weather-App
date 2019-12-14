@@ -14,7 +14,7 @@ protocol GetWeatherIconForLocationUseCaseInterface {
     var delegate: GetWeatherIconForLocationUseCaseDelegate? { get set }
 }
 
-protocol GetWeatherIconForLocationUseCaseDelegate: class {
+protocol GetWeatherIconForLocationUseCaseDelegate: AnyObject {
     func successResponseForIcon(_ imageData: Data)
     func failedResponseForIcon(_ errorMessage: String)
 }

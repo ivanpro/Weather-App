@@ -11,17 +11,17 @@ import Foundation
 protocol FetchWeatherForLocationUseCaseInterface {
     func execute(_ input: String)
 
-    var delegate: FetchWeatherForLocationUseDelegate? { get set }
+    var delegate: FetchWeatherForLocationUseCaseDelegate? { get set }
 }
 
-protocol FetchWeatherForLocationUseDelegate: class {
+protocol FetchWeatherForLocationUseCaseDelegate: AnyObject {
     func successWeatherResponseForLocation(weahter: Weather)
     func failedWeatherResponseForLocation(errorMessage: String)
 }
 
 final class FetchWeatherForLocationUseCase: UseCase<String>, FetchWeatherForLocationUseCaseInterface {
     var weatherRepository: WeatherRepositoryInterface
-    weak var delegate: FetchWeatherForLocationUseDelegate?
+    weak var delegate: FetchWeatherForLocationUseCaseDelegate?
 
     init(weatherRepository: WeatherRepositoryInterface = WeatherRepository()) {
         self.weatherRepository = weatherRepository
@@ -35,6 +35,7 @@ final class FetchWeatherForLocationUseCase: UseCase<String>, FetchWeatherForLoca
 
 extension FetchWeatherForLocationUseCase: FetchWeatherRepositoryDelegate {
     func fetchWeatherForLocationSuccess(weather: Weather) {
+        UserDefaults.standard.setValue(weather.location?.city, forKey: "lastSearch")
         delegate?.successWeatherResponseForLocation(weahter: weather)
     }
 
