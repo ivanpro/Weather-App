@@ -23,6 +23,9 @@ protocol WeatherViewModelDelegate: AnyObject {
     func updateLocaleLabel(with text: String)
     func requestFailed(with text: String)
 
+    func startAnimatingIndicator()
+    func stopAnimatingIndicator()
+
     func updateWeatherIcon(with imageData: Data)
 }
 
@@ -47,7 +50,7 @@ final class WeatherViewModel: WeatherViewModelInterface {
         // Fetch weather for current location if any saved
         // If no previous location saved, present search screen
         setUseCaseDelegates()
-        fetchLastLocationWeatherUseCase.execute()
+        requestUseCase()
     }
 
     func setUseCaseDelegates() {
@@ -57,8 +60,21 @@ final class WeatherViewModel: WeatherViewModelInterface {
 }
 
 extension WeatherViewModel {
+    // MARK: - Helper
+    func requestUseCase() {
+        guard fetchLastLocationWeatherUseCase.execute() == true else {
+            delegate?.stopAnimatingIndicator()
+            return
+        }
+
+        delegate?.startAnimatingIndicator()
+    }
+}
+
+extension WeatherViewModel {
     // MARK: - Coordinator Actions
     func loadWeather(_ weather: Weather) {
+        delegate?.stopAnimatingIndicator()
         successWeatherResponseForLocation(weather: weather)
     }
 }
@@ -66,7 +82,7 @@ extension WeatherViewModel {
 extension WeatherViewModel {
     // MARK: - ViewController Actions
     func tryAgainPressed() {
-        fetchLastLocationWeatherUseCase.execute()
+        requestUseCase()
     }
 
     func searchPressed() {
@@ -77,6 +93,8 @@ extension WeatherViewModel {
 extension WeatherViewModel: FetchLastLocationWeatherUseCaseDelegate {
     // MARK: - FetchLastLocationWeatherUseCaseDelegate
     func successWeatherResponseForLocation(weather weahter: Weather) {
+        delegate?.stopAnimatingIndicator()
+        
         if let icon = weahter.detail?.icon {
             getWeatherIconForLocationUseCase.execute(icon)
         }

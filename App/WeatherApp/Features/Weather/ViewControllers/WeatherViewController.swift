@@ -44,6 +44,13 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
         return button
     }()
 
+    lazy var activityIndicator: UIActivityIndicatorView = {
+        let activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.color = .green
+        activityIndicator.hidesWhenStopped = true
+        return activityIndicator
+    }()
+
     init(viewModel: WeatherViewModelInterface) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -74,13 +81,15 @@ extension WeatherViewController {
         view.addSubview(locationLabel)
         view.addSubview(temperatureLabel)
         view.addSubview(weatherImage)
+        view.addSubview(activityIndicator)
     }
 
     func setConstraints() {
         setSearchButtonConstraints()
         setTemperatureLabelConstraints()
         setLocationLabelConstraints()
-        setWeatherImage()
+        setWeatherImageConstraints()
+        setActivityIndicatorConstraints()
     }
 
     func setSearchButtonConstraints() {
@@ -110,13 +119,19 @@ extension WeatherViewController {
         }
     }
 
-    func setWeatherImage() {
+    func setWeatherImageConstraints() {
         weatherImage.backgroundColor = .yellow
         weatherImage.snp.makeConstraints { make in
             make.height.width.equalTo(100.0)
             make.trailingMargin.equalTo(-30.0)
             make.leading.greaterThanOrEqualTo(temperatureLabel.snp_trailingMargin)
             make.top.equalTo(locationLabel.snp_bottomMargin).offset(Dimensions.margin)
+        }
+    }
+
+    func setActivityIndicatorConstraints() {
+        activityIndicator.snp.makeConstraints { make in
+            make.center.equalTo(view)
         }
     }
 }
@@ -127,6 +142,14 @@ extension WeatherViewController {
     @objc
     func searchPressed() {
         viewModel.searchPressed()
+    }
+
+    func startAnimatingIndicator() {
+        activityIndicator.startAnimating()
+    }
+
+    func stopAnimatingIndicator() {
+        activityIndicator.stopAnimating()
     }
 }
 
