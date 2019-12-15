@@ -14,10 +14,6 @@ private struct CellIdentifiers {
     static let recentLocation = "RecentLocation"
 }
 
-protocol RecentSearchesDataSourceDelegate: AnyObject {
-    func didSelectLocation(_ location: String)
-}
-
 final class RecentSearchesDataSource: NSObject {
     private var diffCalculator: SingleSectionTableViewDiffCalculator<String>
     private var viewModel: SearchViewModelDataSourceInterface
@@ -51,6 +47,22 @@ extension RecentSearchesDataSource: UITableViewDelegate {
         guard let locationName = location(for: indexPath.row) else { return }
         viewModel.didSelectLocation(locationName)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+
+        let deleteAction = UIContextualAction(style: .destructive, title: "Remove") { [weak self] _,_, completionHandler in
+            guard let locationName = self?.location(for: indexPath.row) else { return }
+            self?.viewModel.didRemoveLocation(locationName)
+            return completionHandler(true)
+        }
+
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
+
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        guard location(for: indexPath.row) != nil else { return false }
+        return true
     }
 }
 

@@ -14,6 +14,7 @@ protocol SearchViewModelDataSourceDelegate: AnyObject {
 
 protocol SearchViewModelDataSourceInterface {
     func didSelectLocation(_ location: String)
+    func didRemoveLocation(_ location: String)
 }
 
 protocol SearchViewModelInterface: SearchViewModelDataSourceInterface {
@@ -35,11 +36,14 @@ final class SearchViewModel: SearchViewModelInterface {
 
     var fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
     var retrieveSearchedLocationsUseCase: RetrieveSearchedLocationsUseCaseInterface
+    var removeStoredLocationUseCase: RemoveStoredLocationUseCaseInterface
 
     init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface = FetchWeatherForLocationUseCase(),
-         retrieveSearchedLocationsUseCase: RetrieveSearchedLocationsUseCaseInterface = RetrieveSearchedLocationsUseCase()) {
+         retrieveSearchedLocationsUseCase: RetrieveSearchedLocationsUseCaseInterface = RetrieveSearchedLocationsUseCase(),
+         removeStoredLocationUseCase: RemoveStoredLocationUseCaseInterface = RemoveStoredLocationUseCase()) {
         self.fetchWeatherForLocationUseCase = fetchWeatherForLocationUseCase
         self.retrieveSearchedLocationsUseCase = retrieveSearchedLocationsUseCase
+        self.removeStoredLocationUseCase = removeStoredLocationUseCase
     }
 
     func viewDidLoad() {
@@ -74,6 +78,11 @@ extension SearchViewModel: FetchWeatherForLocationUseCaseDelegate {
 }
 
 extension SearchViewModel: SearchViewModelDataSourceInterface {
+    func didRemoveLocation(_ location: String) {
+        removeStoredLocationUseCase.execute(location)
+        dataSourceDelegate?.reloadTableWithRecentLocations(retrieveSearchedLocationsUseCase.execute())
+    }
+
     func didSelectLocation(_ location: String) {
         fetchWeatherForLocationUseCase.execute(location)
     }

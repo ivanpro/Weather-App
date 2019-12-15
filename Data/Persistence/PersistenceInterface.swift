@@ -13,6 +13,6 @@
 protocol PersistenceInterface {
     func addItem(_ value: String)
     func lastStoredItem() -> String?
-    func removeItem(at index: Int)
+    func removeItem(_ value: String)
     func allItems() -> [String]
 }

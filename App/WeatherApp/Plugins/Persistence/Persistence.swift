@@ -28,7 +28,9 @@ final class Persistence: PersistenceInterface {
         addString(value, to: Keys.recent)
     }
 
-    func removeItem(at index: Int) {
+    func removeItem(_ value: String) {
+        guard let array = defaults.array(forKey: Keys.recent) as? [String] else { return }
+        guard let index = array.firstIndex(where: { $0 == value }) else { return }
         removeItem(at: index, from: Keys.recent)
     }
 
