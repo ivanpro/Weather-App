@@ -21,14 +21,17 @@ protocol FetchLastLocationWeatherUseCaseDelegate: AnyObject {
 
 final class FetchLastLocationWeatherUseCase: VoidUseCase<Bool>, FetchLastLocationWeatherUseCaseInterface {
     var fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
+    var retrieveLastSearchedLocation: RetrieveLastSearchedLocationInterface
     weak var delegate: FetchLastLocationWeatherUseCaseDelegate?
 
-    init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface = FetchWeatherForLocationUseCase()) {
+    init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface = FetchWeatherForLocationUseCase(),
+         retrieveLastSearchedLocation: RetrieveLastSearchedLocationInterface = RetrieveLastSearchedLocation()) {
         self.fetchWeatherForLocationUseCase = fetchWeatherForLocationUseCase
+        self.retrieveLastSearchedLocation = retrieveLastSearchedLocation
     }
 
     override func execute() -> Bool {
-        guard let lastSearchedLocation = UserDefaults.standard.string(forKey: "lastSearch") else { return false }
+        guard let lastSearchedLocation = retrieveLastSearchedLocation.execute() else { return false }
         fetchWeatherForLocationUseCase.delegate = self
         fetchWeatherForLocationUseCase.execute(lastSearchedLocation)
         return true

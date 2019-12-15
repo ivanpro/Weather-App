@@ -30,10 +30,13 @@ protocol WeatherIconRepositoryDelegate: AnyObject {
 final class WeatherRepository: WeatherRepositoryInterface {
     weak var fetchDelegate: FetchWeatherRepositoryDelegate?
     weak var iconDelegate: WeatherIconRepositoryDelegate?
+    var storeSearchedLocationUseCase: StoreSearchedLocationUseCaseInterface
     var client: WeatherClientInterface
 
-    init(client: WeatherClientInterface = WeatherClient()) {
+    init(client: WeatherClientInterface = WeatherClient(),
+         storeSearchedLocationUseCase: StoreSearchedLocationUseCaseInterface = StoreSearchedLocationUseCase()) {
         self.client = client
+        self.storeSearchedLocationUseCase = storeSearchedLocationUseCase
     }
 }
 
@@ -71,7 +74,8 @@ extension WeatherRepository {
             return
         }
 
-        UserDefaults.standard.setValue(weather.location?.city, forKey: "lastSearch")
         fetchDelegate?.fetchWeatherForLocationSuccess(weather: weather)
+        guard let searchLocation = weather.location?.city else { return }
+        storeSearchedLocationUseCase.execute(searchLocation)
     }
 }
