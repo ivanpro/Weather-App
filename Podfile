@@ -12,4 +12,5 @@ target 'WeatherApp' do
    pod 'AlamofireNetworkActivityIndicator', '2.4.0'
    pod 'SnapKit', '5.0.1'
    pod 'Dwifft', '0.9'
+   pod 'Sourcery', '0.17.0'
 end

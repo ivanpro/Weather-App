@@ -6,6 +6,7 @@ PODS:
     - Alamofire (~> 4.8)
   - Dwifft (0.9)
   - SnapKit (5.0.1)
+  - Sourcery (0.17.0)
 
 DEPENDENCIES:
   - Alamofire (= 4.9.1)
@@ -13,6 +14,7 @@ DEPENDENCIES:
   - AlamofireNetworkActivityIndicator (= 2.4.0)
   - Dwifft (= 0.9)
   - SnapKit (= 5.0.1)
+  - Sourcery (= 0.17.0)
 
 SPEC REPOS:
   trunk:
@@ -21,6 +23,7 @@ SPEC REPOS:
     - AlamofireNetworkActivityIndicator
     - Dwifft
     - SnapKit
+    - Sourcery
 
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
@@ -28,7 +31,8 @@ SPEC CHECKSUMS:
   AlamofireNetworkActivityIndicator: 9acc3de3ca6645bf0efed462396b0df13dd3e7b8
   Dwifft: 42912068ed2a8146077d1a1404df18625bd086e1
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
+  Sourcery: 3ed61be7c8a1218fce349266139379dba477efe0
 
-PODFILE CHECKSUM: 32bfcafb04be16c3e063bfc91daae2d7b37a1968
+PODFILE CHECKSUM: 59f5367e13c7fb54f247331e0392995794c7d2f6
 
 COCOAPODS: 1.8.4
