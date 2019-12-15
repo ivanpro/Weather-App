@@ -12,10 +12,6 @@ import SnapKit
 
 protocol WeatherViewControllerInterface {}
 
-private struct Theme {
-    static let color: UIColor = .darkGray
-}
-
 final class WeatherViewController: UIViewController, WeatherViewControllerInterface {
     var viewModel: WeatherViewModelInterface
 

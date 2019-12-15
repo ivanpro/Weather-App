@@ -14,11 +14,18 @@ private struct CellIdentifiers {
     static let recentLocation = "RecentLocation"
 }
 
+protocol RecentSearchesDataSourceDelegate: AnyObject {
+    func didSelectLocation(_ location: String)
+}
+
 final class RecentSearchesDataSource: NSObject {
     private var diffCalculator: SingleSectionTableViewDiffCalculator<String>
+    private var viewModel: SearchViewModelDataSourceInterface
 
-    init(tableView: UITableView) {
-        diffCalculator = SingleSectionTableViewDiffCalculator<String>(tableView: tableView)
+    init(viewModel: SearchViewModelDataSourceInterface = SearchViewModel(),
+         tableView: UITableView) {
+        self.diffCalculator = SingleSectionTableViewDiffCalculator<String>(tableView: tableView)
+        self.viewModel = viewModel
         super.init()
         self.registerCells(for: tableView)
     }
@@ -30,10 +37,9 @@ extension RecentSearchesDataSource: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard diffCalculator.rows.count > indexPath.row else { return UITableViewCell() }
-        let recentLocation = diffCalculator.rows[indexPath.row]
+        guard let locationName = location(for: indexPath.row) else { return UITableViewCell() }
         let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifiers.recentLocation)
-        cell?.textLabel?.text = recentLocation
+        cell?.textLabel?.text = locationName
         cell?.textLabel?.font = UIFont(name: "Arial", size: 20.0)
         cell?.textLabel?.textColor = .black
         return cell ?? UITableViewCell()
@@ -41,7 +47,11 @@ extension RecentSearchesDataSource: UITableViewDataSource {
 }
 
 extension RecentSearchesDataSource: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let locationName = location(for: indexPath.row) else { return }
+        viewModel.didSelectLocation(locationName)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 }
 
 extension RecentSearchesDataSource: SearchViewModelDataSourceDelegate {
@@ -53,6 +63,11 @@ extension RecentSearchesDataSource: SearchViewModelDataSourceDelegate {
 
 extension RecentSearchesDataSource {
     // MARK: - Utility
+
+    private func location(for index: Int) -> String? {
+        guard diffCalculator.rows.count > index else { return nil }
+        return diffCalculator.rows[index]
+    }
 
     private func registerCells(for tableView: UITableView) {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: CellIdentifiers.recentLocation)

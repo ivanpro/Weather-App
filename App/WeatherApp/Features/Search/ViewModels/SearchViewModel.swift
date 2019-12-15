@@ -12,7 +12,11 @@ protocol SearchViewModelDataSourceDelegate: AnyObject {
     func reloadTableWithRecentLocations(_ locations: [String])
 }
 
-protocol SearchViewModelInterface {
+protocol SearchViewModelDataSourceInterface {
+    func didSelectLocation(_ location: String)
+}
+
+protocol SearchViewModelInterface: SearchViewModelDataSourceInterface {
     func viewDidLoad()
     func textFieldShouldReturn(_ text: String?) -> Bool
 
@@ -66,5 +70,11 @@ extension SearchViewModel: FetchWeatherForLocationUseCaseDelegate {
 
     func failedWeatherResponseForLocation(_ errorMessage: String) {
         coordinatorDelegate?.fetchWeatherForLocationFailed(errorMessage)
+    }
+}
+
+extension SearchViewModel: SearchViewModelDataSourceInterface {
+    func didSelectLocation(_ location: String) {
+        fetchWeatherForLocationUseCase.execute(location)
     }
 }

@@ -33,7 +33,7 @@ final class SearchViewController: UIViewController, SearchViewControllerInterfac
         return tableView
     }()
 
-    private lazy var dataSource = RecentSearchesDataSource(tableView: tableView)
+    private lazy var dataSource = RecentSearchesDataSource(viewModel: self.viewModel, tableView: self.tableView)
 
     init(viewModel: SearchViewModelInterface) {
         self.viewModel = viewModel
