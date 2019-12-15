@@ -21,11 +21,11 @@ protocol FetchLastLocationWeatherUseCaseDelegate: AnyObject {
 
 final class FetchLastLocationWeatherUseCase: VoidUseCase<Bool>, FetchLastLocationWeatherUseCaseInterface {
     var fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
-    var retrieveLastSearchedLocation: RetrieveLastSearchedLocationInterface
+    var retrieveLastSearchedLocation: RetrieveLastSearchedLocationUseCaseInterface
     weak var delegate: FetchLastLocationWeatherUseCaseDelegate?
 
     init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface = FetchWeatherForLocationUseCase(),
-         retrieveLastSearchedLocation: RetrieveLastSearchedLocationInterface = RetrieveLastSearchedLocation()) {
+         retrieveLastSearchedLocation: RetrieveLastSearchedLocationUseCaseInterface = RetrieveLastSearchedLocationUseCase()) {
         self.fetchWeatherForLocationUseCase = fetchWeatherForLocationUseCase
         self.retrieveLastSearchedLocation = retrieveLastSearchedLocation
     }

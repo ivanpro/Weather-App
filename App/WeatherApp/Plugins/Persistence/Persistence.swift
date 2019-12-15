@@ -19,6 +19,10 @@ final class Persistence: PersistenceInterface {
         self.defaults = defaults
     }
 
+    func allItems() -> [String] {
+        return defaults.array(forKey: Keys.recent) as? [String] ?? [String]()
+    }
+
     func addItem(_ value: String) {
         addString(value, to: Keys.recent)
     }
