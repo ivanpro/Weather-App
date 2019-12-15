@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Dwifft
 
 protocol SearchViewControllerInterface {}
 
@@ -25,6 +26,15 @@ final class SearchViewController: UIViewController, SearchViewControllerInterfac
         return textField
     }()
 
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 40.0
+        return tableView
+    }()
+
+    private lazy var dataSource = RecentSearchesDataSource(tableView: tableView)
+
     init(viewModel: SearchViewModelInterface) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -36,7 +46,7 @@ final class SearchViewController: UIViewController, SearchViewControllerInterfac
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.delegate = self
+        viewModel.dataSourceDelegate = dataSource
         buildUI()
         viewModel.viewDidLoad()
     }
@@ -52,14 +62,17 @@ extension SearchViewController {
         view.backgroundColor = .white
         addSubviews()
         setConstraints()
+        setupTableViewDataSource()
     }
 
     func addSubviews() {
         view.addSubview(searchTextField)
+        view.addSubview(tableView)
     }
 
     func setConstraints() {
         setSearchTextFieldConstraints()
+        setTableViewConstraints()
     }
 
     func setSearchTextFieldConstraints() {
@@ -70,10 +83,19 @@ extension SearchViewController {
             make.trailingMargin.equalTo(-Dimensions.margin * 2)
         }
     }
-}
 
-extension SearchViewController: SearchViewModelDelegate {
-    // MARK: - SearchViewModelDelegate
+    func setTableViewConstraints() {
+        tableView.backgroundColor = .yellow
+        tableView.snp.makeConstraints { make in
+            make.topMargin.equalTo(searchTextField.snp_bottomMargin).offset(Dimensions.margin * 2)
+            make.leading.trailing.bottom.equalTo(view)
+        }
+    }
+
+    func setupTableViewDataSource() {
+        tableView.dataSource = dataSource
+        tableView.delegate = dataSource
+    }
 }
 
 extension SearchViewController: UITextFieldDelegate {

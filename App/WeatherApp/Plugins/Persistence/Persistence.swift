@@ -20,7 +20,8 @@ final class Persistence: PersistenceInterface {
     }
 
     func allItems() -> [String] {
-        return defaults.array(forKey: Keys.recent) as? [String] ?? [String]()
+        let array = defaults.array(forKey: Keys.recent) as? [String] ?? [String]()
+        return array.reversed()
     }
 
     func addItem(_ value: String) {
@@ -43,7 +44,8 @@ final class Persistence: PersistenceInterface {
     }
 
     func addString(_ value: String, to key: String) {
-        var array = defaults.array(forKey: key) ?? [String]()
+        var array = defaults.array(forKey: key) as? [String] ?? [String]()
+        guard !array.contains(value) else { return }
         array.append(value)
         defaults.set(array, forKey: key)
     }

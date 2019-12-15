@@ -8,12 +8,16 @@
 
 import Foundation
 
+protocol SearchViewModelDataSourceDelegate: AnyObject {
+    func reloadTableWithRecentLocations(_ locations: [String])
+}
+
 protocol SearchViewModelInterface {
     func viewDidLoad()
     func textFieldShouldReturn(_ text: String?) -> Bool
 
-    var delegate: SearchViewModelDelegate? { get set }
     var coordinatorDelegate: SearchCoordinatorDelegate? { get set }
+    var dataSourceDelegate: SearchViewModelDataSourceDelegate? { get set }
 }
 
 protocol SearchCoordinatorDelegate: AnyObject {
@@ -21,19 +25,22 @@ protocol SearchCoordinatorDelegate: AnyObject {
     func fetchWeatherForLocationFailed(_ errorMessage: String)
 }
 
-protocol SearchViewModelDelegate: AnyObject {}
-
 final class SearchViewModel: SearchViewModelInterface {
-    weak var delegate: SearchViewModelDelegate?
     weak var coordinatorDelegate: SearchCoordinatorDelegate?
-    var fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
+    weak var dataSourceDelegate: SearchViewModelDataSourceDelegate?
 
-    init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface = FetchWeatherForLocationUseCase()) {
+    var fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface
+    var retrieveSearchedLocationsUseCase: RetrieveSearchedLocationsUseCaseInterface
+
+    init(fetchWeatherForLocationUseCase: FetchWeatherForLocationUseCaseInterface = FetchWeatherForLocationUseCase(),
+         retrieveSearchedLocationsUseCase: RetrieveSearchedLocationsUseCaseInterface = RetrieveSearchedLocationsUseCase()) {
         self.fetchWeatherForLocationUseCase = fetchWeatherForLocationUseCase
+        self.retrieveSearchedLocationsUseCase = retrieveSearchedLocationsUseCase
     }
 
     func viewDidLoad() {
         fetchWeatherForLocationUseCase.delegate = self
+        dataSourceDelegate?.reloadTableWithRecentLocations(retrieveSearchedLocationsUseCase.execute())
     }
 }
 
