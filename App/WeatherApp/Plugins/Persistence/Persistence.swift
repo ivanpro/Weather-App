@@ -23,8 +23,13 @@ final class Persistence: PersistenceInterface {
         addString(value, to: Keys.recent)
     }
 
-    func remove(_ index: Int) {
+    func removeItem(at index: Int) {
         removeItem(at: index, from: Keys.recent)
+    }
+
+    func lastStoredItem() -> String? {
+        guard let array = defaults.array(forKey: Keys.recent) else { return nil }
+        return array.last as? String
     }
 
     func removeItem(at index: Int, from key: String) {
