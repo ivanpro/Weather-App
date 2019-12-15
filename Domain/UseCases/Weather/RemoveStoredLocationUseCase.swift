@@ -20,6 +20,6 @@ final class RemoveStoredLocationUseCase: UseCase<String>, RemoveStoredLocationUs
     }
 
     override func execute(_ input: String) {
-        return persistence.removeItem(input)
+        persistence.removeItem(input)
     }
 }
