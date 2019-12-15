@@ -15,7 +15,7 @@ protocol CurrentUserLocationUseCaseInterface: AutoMockable {
     var delegate: CurrentUserLocationUseCaseDelegate? { get set }
 }
 
-protocol CurrentUserLocationUseCaseDelegate: AnyObject {
+protocol CurrentUserLocationUseCaseDelegate: AnyObject, AutoMockable {
     func weatherForUserLocation(_ weather: Weather)
     func failedToAcquireUserLocation(errorMessage: String)
 }

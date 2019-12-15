@@ -38,6 +38,39 @@ startClosure?()
 }
 
 }
+class CurrentUserLocationUseCaseDelegateMock: CurrentUserLocationUseCaseDelegate {
+
+//MARK: - weatherForUserLocation
+
+var weatherForUserLocationCallsCount = 0
+var weatherForUserLocationCalled: Bool {
+return weatherForUserLocationCallsCount > 0
+}
+var weatherForUserLocationReceivedWeather: Weather?
+var weatherForUserLocationClosure: ((Weather) -> Void)?
+
+func weatherForUserLocation(_ weather: Weather) {
+weatherForUserLocationCallsCount += 1
+weatherForUserLocationReceivedWeather = weather
+weatherForUserLocationClosure?(weather)
+}
+
+//MARK: - failedToAcquireUserLocation
+
+var failedToAcquireUserLocationErrorMessageCallsCount = 0
+var failedToAcquireUserLocationErrorMessageCalled: Bool {
+return failedToAcquireUserLocationErrorMessageCallsCount > 0
+}
+var failedToAcquireUserLocationErrorMessageReceivedErrorMessage: String?
+var failedToAcquireUserLocationErrorMessageClosure: ((String) -> Void)?
+
+func failedToAcquireUserLocation(errorMessage: String) {
+failedToAcquireUserLocationErrorMessageCallsCount += 1
+failedToAcquireUserLocationErrorMessageReceivedErrorMessage = errorMessage
+failedToAcquireUserLocationErrorMessageClosure?(errorMessage)
+}
+
+}
 class CurrentUserLocationUseCaseMock: CurrentUserLocationUseCaseInterface {
 var delegate: CurrentUserLocationUseCaseDelegate?
 
