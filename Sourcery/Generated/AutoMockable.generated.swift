@@ -112,6 +112,39 @@ executeClosure?(input)
 }
 
 }
+class FetchWeatherRepositoryDelegateMock: FetchWeatherRepositoryDelegate {
+
+//MARK: - fetchWeatherForLocationSuccess
+
+var fetchWeatherForLocationSuccessWeatherCallsCount = 0
+var fetchWeatherForLocationSuccessWeatherCalled: Bool {
+return fetchWeatherForLocationSuccessWeatherCallsCount > 0
+}
+var fetchWeatherForLocationSuccessWeatherReceivedWeather: Weather?
+var fetchWeatherForLocationSuccessWeatherClosure: ((Weather) -> Void)?
+
+func fetchWeatherForLocationSuccess(weather: Weather) {
+fetchWeatherForLocationSuccessWeatherCallsCount += 1
+fetchWeatherForLocationSuccessWeatherReceivedWeather = weather
+fetchWeatherForLocationSuccessWeatherClosure?(weather)
+}
+
+//MARK: - fetchWeatherForLocationError
+
+var fetchWeatherForLocationErrorErrorMessageCallsCount = 0
+var fetchWeatherForLocationErrorErrorMessageCalled: Bool {
+return fetchWeatherForLocationErrorErrorMessageCallsCount > 0
+}
+var fetchWeatherForLocationErrorErrorMessageReceivedErrorMessage: String?
+var fetchWeatherForLocationErrorErrorMessageClosure: ((String) -> Void)?
+
+func fetchWeatherForLocationError(errorMessage: String) {
+fetchWeatherForLocationErrorErrorMessageCallsCount += 1
+fetchWeatherForLocationErrorErrorMessageReceivedErrorMessage = errorMessage
+fetchWeatherForLocationErrorErrorMessageClosure?(errorMessage)
+}
+
+}
 class GetWeatherIconForLocationUseCaseMock: GetWeatherIconForLocationUseCaseInterface {
 var delegate: GetWeatherIconForLocationUseCaseDelegate?
 
@@ -489,6 +522,39 @@ var startClosure: (() -> Void)?
 func start() {
 startCallsCount += 1
 startClosure?()
+}
+
+}
+class WeatherIconRepositoryDelegateMock: WeatherIconRepositoryDelegate {
+
+//MARK: - fetchWeatherForLocationSuccess
+
+var fetchWeatherForLocationSuccessCallsCount = 0
+var fetchWeatherForLocationSuccessCalled: Bool {
+return fetchWeatherForLocationSuccessCallsCount > 0
+}
+var fetchWeatherForLocationSuccessReceivedImage: Data?
+var fetchWeatherForLocationSuccessClosure: ((Data) -> Void)?
+
+func fetchWeatherForLocationSuccess(_ image: Data) {
+fetchWeatherForLocationSuccessCallsCount += 1
+fetchWeatherForLocationSuccessReceivedImage = image
+fetchWeatherForLocationSuccessClosure?(image)
+}
+
+//MARK: - fetchWeatherIconError
+
+var fetchWeatherIconErrorCallsCount = 0
+var fetchWeatherIconErrorCalled: Bool {
+return fetchWeatherIconErrorCallsCount > 0
+}
+var fetchWeatherIconErrorReceivedErrorMessage: String?
+var fetchWeatherIconErrorClosure: ((String) -> Void)?
+
+func fetchWeatherIconError(_ errorMessage: String) {
+fetchWeatherIconErrorCallsCount += 1
+fetchWeatherIconErrorReceivedErrorMessage = errorMessage
+fetchWeatherIconErrorClosure?(errorMessage)
 }
 
 }

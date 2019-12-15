@@ -9,7 +9,6 @@
 import Foundation
 
 struct Temperature: Equatable {
-    let feelsLike: Float
     let humidity: Int
     let pressure: Int
     let temp: Float
@@ -18,14 +17,12 @@ struct Temperature: Equatable {
 
     init?(with dictionary: JSONDictionary) {
         let mainDict = dictionary["main"] as? JSONDictionary
-        guard let feels_like = mainDict?.float(forKey: "feels_like") else { return nil }
-        guard let humidity = mainDict?.int(forKey: "humidity") else { return nil }
-        guard let pressure = mainDict?.int(forKey: "pressure") else { return nil }
-        guard let temp = mainDict?.float(forKey: "temp") else { return nil }
         guard let temp_max = mainDict?.float(forKey: "temp_max") else { return nil }
         guard let temp_min = mainDict?.float(forKey: "temp_min") else { return nil }
+        guard let temp = mainDict?.float(forKey: "temp") else { return nil }
+        guard let humidity = mainDict?.int(forKey: "humidity") else { return nil }
+        guard let pressure = mainDict?.int(forKey: "pressure") else { return nil }
 
-        self.feelsLike = feels_like
         self.humidity = humidity
         self.pressure = pressure
         self.temp = temp

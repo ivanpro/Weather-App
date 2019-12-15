@@ -75,10 +75,12 @@ final class WeatherViewModel: WeatherViewModelInterface {
 
 extension WeatherViewModel {
     // MARK: - Helper
-    func requestUseCase() {
+    func requestUseCase(openSearch: Bool = false) {
         guard fetchLastLocationWeatherUseCase.execute() == true else {
             delegate?.stopAnimatingIndicator()
-            coordinatorDelegate?.presentSearchScreen()
+            if openSearch {
+                coordinatorDelegate?.presentSearchScreen()
+            }
             return
         }
 
@@ -102,7 +104,7 @@ extension WeatherViewModel {
 extension WeatherViewModel {
     // MARK: - ViewController Actions
     func tryAgainPressed() {
-        requestUseCase()
+        requestUseCase(openSearch: true)
     }
 
     func searchPressed() {
@@ -110,6 +112,7 @@ extension WeatherViewModel {
     }
 
     func gpsPressed() {
+        delegate?.startAnimatingIndicator()
         cancelLocationHandler = currentUserLocationUseCase.execute()
     }
 }
@@ -143,7 +146,9 @@ extension WeatherViewModel: GetWeatherIconForLocationUseCaseDelegate {
         delegate?.updateWeatherIcon(with: imageData)
     }
 
-    func failedResponseForIcon(_ errorMessage: String) {}
+    func failedResponseForIcon(_ errorMessage: String) {
+        delegate?.requestFailed(with: errorMessage)
+    }
 }
 
 extension WeatherViewModel: CurrentUserLocationUseCaseDelegate {

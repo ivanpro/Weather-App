@@ -17,12 +17,12 @@ protocol WeatherRepositoryInterface: AutoMockable {
     var iconDelegate: WeatherIconRepositoryDelegate? { get set }
 }
 
-protocol FetchWeatherRepositoryDelegate: AnyObject {
+protocol FetchWeatherRepositoryDelegate: AnyObject, AutoMockable {
     func fetchWeatherForLocationSuccess(weather: Weather)
     func fetchWeatherForLocationError(errorMessage: String)
 }
 
-protocol WeatherIconRepositoryDelegate: AnyObject {
+protocol WeatherIconRepositoryDelegate: AnyObject, AutoMockable {
     func fetchWeatherForLocationSuccess(_ image: Data)
     func fetchWeatherIconError(_ errorMessage: String)
 }
@@ -44,32 +44,32 @@ extension WeatherRepository {
     func fetchWeatherForLocation(_ location: String) {
         client.fetchWatherForLocation(location, onSuccess: { [weak self] json in
             self?.parseSuccessfulRequest(json)
-        }) { [weak self] errorMessage in
+        }, onError: { [weak self] errorMessage in
             self?.fetchDelegate?.fetchWeatherForLocationError(errorMessage: errorMessage)
-        }
+        })
     }
 
     func fetchWeatherForCoordinate(_ coordinate: Coordinate) {
         client.fetchWatherForCoordinates(coordinate.latitude, longitude: coordinate.longitude, onSuccess: { [weak self] json in
             self?.parseSuccessfulRequest(json)
-        }) { [weak self] errorMessage in
+        }, onError: { [weak self] errorMessage in
             self?.fetchDelegate?.fetchWeatherForLocationError(errorMessage: errorMessage)
-        }
+        })
     }
 
     func fetchIconForWeather(_ iconName: String) {
         client.fetchIconForWeather(iconName, onSuccess: { [weak self] image in
             self?.iconDelegate?.fetchWeatherForLocationSuccess(image)
-        }) { [weak self] errorMessage in
+        }, onError: { [weak self] errorMessage in
             self?.iconDelegate?.fetchWeatherIconError(errorMessage)
-        }
+        })
     }
 }
 
 extension WeatherRepository {
     // MARK: - Helper
     func parseSuccessfulRequest(_ json: JSONDictionary) {
-        guard let weather = Weather(with: json) else {
+        guard let weather = Weather(with: json), weather.location?.city != nil else {
             fetchDelegate?.fetchWeatherForLocationError(errorMessage: "Failed to parse Weather entity")
             return
         }
