@@ -14,7 +14,7 @@ protocol FetchLastLocationWeatherUseCaseInterface: AutoMockable {
     var delegate: FetchLastLocationWeatherUseCaseDelegate? { get set }
 }
 
-protocol FetchLastLocationWeatherUseCaseDelegate: AnyObject {
+protocol FetchLastLocationWeatherUseCaseDelegate: AnyObject, AutoMockable {
     func successWeatherResponseForLocation(weather: Weather)
     func failedWeatherResponseForLocation(errorMessage: String)
 }

@@ -89,6 +89,39 @@ return executeClosure.map({ $0() }) ?? executeReturnValue
 }
 
 }
+class FetchLastLocationWeatherUseCaseDelegateMock: FetchLastLocationWeatherUseCaseDelegate {
+
+//MARK: - successWeatherResponseForLocation
+
+var successWeatherResponseForLocationWeatherCallsCount = 0
+var successWeatherResponseForLocationWeatherCalled: Bool {
+return successWeatherResponseForLocationWeatherCallsCount > 0
+}
+var successWeatherResponseForLocationWeatherReceivedWeather: Weather?
+var successWeatherResponseForLocationWeatherClosure: ((Weather) -> Void)?
+
+func successWeatherResponseForLocation(weather: Weather) {
+successWeatherResponseForLocationWeatherCallsCount += 1
+successWeatherResponseForLocationWeatherReceivedWeather = weather
+successWeatherResponseForLocationWeatherClosure?(weather)
+}
+
+//MARK: - failedWeatherResponseForLocation
+
+var failedWeatherResponseForLocationErrorMessageCallsCount = 0
+var failedWeatherResponseForLocationErrorMessageCalled: Bool {
+return failedWeatherResponseForLocationErrorMessageCallsCount > 0
+}
+var failedWeatherResponseForLocationErrorMessageReceivedErrorMessage: String?
+var failedWeatherResponseForLocationErrorMessageClosure: ((String) -> Void)?
+
+func failedWeatherResponseForLocation(errorMessage: String) {
+failedWeatherResponseForLocationErrorMessageCallsCount += 1
+failedWeatherResponseForLocationErrorMessageReceivedErrorMessage = errorMessage
+failedWeatherResponseForLocationErrorMessageClosure?(errorMessage)
+}
+
+}
 class FetchLastLocationWeatherUseCaseMock: FetchLastLocationWeatherUseCaseInterface {
 var delegate: FetchLastLocationWeatherUseCaseDelegate?
 
