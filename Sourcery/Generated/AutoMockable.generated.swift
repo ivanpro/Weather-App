@@ -277,6 +277,39 @@ fetchWeatherForLocationErrorErrorMessageClosure?(errorMessage)
 }
 
 }
+class GetWeatherIconForLocationUseCaseDelegateMock: GetWeatherIconForLocationUseCaseDelegate {
+
+//MARK: - successResponseForIcon
+
+var successResponseForIconCallsCount = 0
+var successResponseForIconCalled: Bool {
+return successResponseForIconCallsCount > 0
+}
+var successResponseForIconReceivedImageData: Data?
+var successResponseForIconClosure: ((Data) -> Void)?
+
+func successResponseForIcon(_ imageData: Data) {
+successResponseForIconCallsCount += 1
+successResponseForIconReceivedImageData = imageData
+successResponseForIconClosure?(imageData)
+}
+
+//MARK: - failedResponseForIcon
+
+var failedResponseForIconCallsCount = 0
+var failedResponseForIconCalled: Bool {
+return failedResponseForIconCallsCount > 0
+}
+var failedResponseForIconReceivedErrorMessage: String?
+var failedResponseForIconClosure: ((String) -> Void)?
+
+func failedResponseForIcon(_ errorMessage: String) {
+failedResponseForIconCallsCount += 1
+failedResponseForIconReceivedErrorMessage = errorMessage
+failedResponseForIconClosure?(errorMessage)
+}
+
+}
 class GetWeatherIconForLocationUseCaseMock: GetWeatherIconForLocationUseCaseInterface {
 var delegate: GetWeatherIconForLocationUseCaseDelegate?
 

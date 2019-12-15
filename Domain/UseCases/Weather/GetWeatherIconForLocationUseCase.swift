@@ -14,7 +14,7 @@ protocol GetWeatherIconForLocationUseCaseInterface: AutoMockable {
     var delegate: GetWeatherIconForLocationUseCaseDelegate? { get set }
 }
 
-protocol GetWeatherIconForLocationUseCaseDelegate: AnyObject {
+protocol GetWeatherIconForLocationUseCaseDelegate: AnyObject, AutoMockable {
     func successResponseForIcon(_ imageData: Data)
     func failedResponseForIcon(_ errorMessage: String)
 }
