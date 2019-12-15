@@ -35,8 +35,7 @@ final class Persistence: PersistenceInterface {
     }
 
     func lastStoredItem() -> String? {
-        guard let array = defaults.array(forKey: Keys.recent) else { return nil }
-        return array.last as? String
+        return allItems().first
     }
 
     func removeItem(at index: Int, from key: String) {
