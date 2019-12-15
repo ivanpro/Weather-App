@@ -8,11 +8,11 @@
 
 import Foundation
 
-protocol RetrieveLastSearchedLocationInterface {
+protocol RetrieveLastSearchedLocationUseCaseInterface {
     func execute() -> String?
 }
 
-final class RetrieveLastSearchedLocation: VoidUseCase<String?>, RetrieveLastSearchedLocationInterface {
+final class RetrieveLastSearchedLocationUseCase: VoidUseCase<String?>, RetrieveLastSearchedLocationUseCaseInterface {
     var persistence: PersistenceInterface
 
     init(persistence: PersistenceInterface = Persistence(defaults: UserDefaults.standard)) {
