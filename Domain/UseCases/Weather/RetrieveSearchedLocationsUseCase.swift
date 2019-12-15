@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol RetrieveSearchedLocationsUseCaseInterface {
+protocol RetrieveSearchedLocationsUseCaseInterface: AutoMockable {
     func execute() -> [String]
 }
 

@@ -10,7 +10,7 @@
 /// layer to change without breaking the whole app. This will allows us to use CoreData or
 /// Keychain later on if we want to
 
-protocol PersistenceInterface {
+protocol PersistenceInterface: AutoMockable {
     func addItem(_ value: String)
     func lastStoredItem() -> String?
     func removeItem(_ value: String)

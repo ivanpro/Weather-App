@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol WeatherCoordinatorInterface: Coordinator {}
+protocol WeatherCoordinatorInterface: Coordinator, AutoMockable {}
 
 enum WeatherCoordinatorChild: Equatable {
     case search

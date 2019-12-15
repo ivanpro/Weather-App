@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol GetWeatherIconForLocationUseCaseInterface {
+protocol GetWeatherIconForLocationUseCaseInterface: AutoMockable {
     func execute(_ input: String)
 
     var delegate: GetWeatherIconForLocationUseCaseDelegate? { get set }

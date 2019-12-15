@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol RemoveStoredLocationUseCaseInterface {
+protocol RemoveStoredLocationUseCaseInterface: AutoMockable {
     func execute(_ input: String)
 }
 

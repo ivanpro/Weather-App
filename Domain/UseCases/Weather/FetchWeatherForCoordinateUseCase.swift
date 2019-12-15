@@ -9,7 +9,7 @@
 import Foundation
 
 typealias Coordinate = (latitude: Double, longitude: Double)
-protocol FetchWeatherForCoordinateUseCaseInterface {
+protocol FetchWeatherForCoordinateUseCaseInterface: AutoMockable {
     func execute(_ input: Coordinate)
 
     var delegate: FetchWeatherForCoordinateUseCaseDelegate? { get set }

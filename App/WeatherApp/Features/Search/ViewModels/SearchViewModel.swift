@@ -12,7 +12,7 @@ protocol SearchViewModelDataSourceDelegate: AnyObject {
     func reloadTableWithRecentLocations(_ locations: [String])
 }
 
-protocol SearchViewModelDataSourceInterface {
+protocol SearchViewModelDataSourceInterface: AutoMockable {
     func didSelectLocation(_ location: String)
     func didRemoveLocation(_ location: String)
 }

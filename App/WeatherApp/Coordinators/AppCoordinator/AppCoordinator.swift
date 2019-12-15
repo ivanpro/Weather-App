@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol AppCoordinatorInterface: Coordinator {}
+protocol AppCoordinatorInterface: Coordinator, AutoMockable {}
 
 enum AppCoordinatorChild: Equatable {
     case map

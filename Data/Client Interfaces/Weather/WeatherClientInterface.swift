@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol WeatherClientInterface {
+protocol WeatherClientInterface: AutoMockable {
     func fetchWatherForLocation(_ location: String, onSuccess: ((_ json: JSONDictionary) -> Void)?, onError: HttpErrorClosure?)
     func fetchWatherForCoordinates(_ latitude: Double, longitude: Double, onSuccess: ((_ json: JSONDictionary) -> Void)?, onError: HttpErrorClosure?)
     func fetchIconForWeather(_ iconId: String, onSuccess: ((Data) -> Void)?, onError: HttpErrorClosure?)

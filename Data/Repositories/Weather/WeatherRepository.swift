@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol WeatherRepositoryInterface {
+protocol WeatherRepositoryInterface: AutoMockable {
     func fetchWeatherForLocation(_ location: String)
     func fetchWeatherForCoordinate(_ coordinate: Coordinate)
     func fetchIconForWeather(_ iconName: String)

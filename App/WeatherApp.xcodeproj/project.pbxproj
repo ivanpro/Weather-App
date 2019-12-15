@@ -28,6 +28,8 @@
 		E71BE70423A5DB4C00F33E07 /* RecentSearchesDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71BE70323A5DB4C00F33E07 /* RecentSearchesDataSource.swift */; };
 		E71BE70623A5E2CD00F33E07 /* RetrieveSearchedLocationsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71BE70523A5E2CD00F33E07 /* RetrieveSearchedLocationsUseCase.swift */; };
 		E71BE70823A5F67500F33E07 /* RemoveStoredLocationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71BE70723A5F67500F33E07 /* RemoveStoredLocationUseCase.swift */; };
+		E71BE71523A60ECC00F33E07 /* AutoMockable.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71BE70F23A60ECC00F33E07 /* AutoMockable.generated.swift */; };
+		E71BE71823A60EE400F33E07 /* SourceryProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71BE71723A60EE400F33E07 /* SourceryProtocols.swift */; };
 		E7752BE223A2344500D39364 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7752BE123A2344400D39364 /* Coordinator.swift */; };
 		E7752BE423A2348C00D39364 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7752BE323A2348C00D39364 /* AppCoordinator.swift */; };
 		E7752BE723A23C5400D39364 /* WeatherCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7752BE623A23C5400D39364 /* WeatherCoordinator.swift */; };
@@ -82,6 +84,8 @@
 		E71BE70323A5DB4C00F33E07 /* RecentSearchesDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchesDataSource.swift; sourceTree = "<group>"; };
 		E71BE70523A5E2CD00F33E07 /* RetrieveSearchedLocationsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetrieveSearchedLocationsUseCase.swift; sourceTree = "<group>"; };
 		E71BE70723A5F67500F33E07 /* RemoveStoredLocationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveStoredLocationUseCase.swift; sourceTree = "<group>"; };
+		E71BE70F23A60ECC00F33E07 /* AutoMockable.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoMockable.generated.swift; sourceTree = "<group>"; };
+		E71BE71723A60EE400F33E07 /* SourceryProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceryProtocols.swift; sourceTree = "<group>"; };
 		E7752BE123A2344400D39364 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E7752BE323A2348C00D39364 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		E7752BE623A23C5400D39364 /* WeatherCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCoordinator.swift; sourceTree = "<group>"; };
@@ -217,6 +221,32 @@
 				E71BE70323A5DB4C00F33E07 /* RecentSearchesDataSource.swift */,
 			);
 			path = DataSources;
+			sourceTree = "<group>";
+		};
+		E71BE70A23A60ECC00F33E07 /* Sourcery */ = {
+			isa = PBXGroup;
+			children = (
+				E71BE70B23A60ECC00F33E07 /* Generated */,
+				E71BE71123A60ECC00F33E07 /* Protocols */,
+			);
+			name = Sourcery;
+			path = ../Sourcery;
+			sourceTree = "<group>";
+		};
+		E71BE70B23A60ECC00F33E07 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				E71BE70F23A60ECC00F33E07 /* AutoMockable.generated.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
+		E71BE71123A60ECC00F33E07 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				E71BE71723A60EE400F33E07 /* SourceryProtocols.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		E7752BD923A20E8F00D39364 /* Data */ = {
@@ -443,6 +473,7 @@
 		E7AA701623A20ADD0076A9E2 = {
 			isa = PBXGroup;
 			children = (
+				E71BE70A23A60ECC00F33E07 /* Sourcery */,
 				E7752BDC23A20F4000D39364 /* Common */,
 				E7752BD923A20E8F00D39364 /* Data */,
 				E7752BDB23A20E9000D39364 /* Domain */,
@@ -493,6 +524,7 @@
 			buildConfigurationList = E7AA703E23A20ADE0076A9E2 /* Build configuration list for PBXNativeTarget "WeatherApp" */;
 			buildPhases = (
 				51D3F72417C07DD56A1BC763 /* [CP] Check Pods Manifest.lock */,
+				E71BE70923A60B0F00F33E07 /* Run Sourcery */,
 				E7AA701B23A20ADD0076A9E2 /* Sources */,
 				E7AA701C23A20ADD0076A9E2 /* Frameworks */,
 				E7AA701D23A20ADD0076A9E2 /* Resources */,
@@ -622,6 +654,24 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-WeatherApp/Pods-WeatherApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E71BE70923A60B0F00F33E07 /* Run Sourcery */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Sourcery";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/Sourcery/bin/sourcery\" --sources \"${SRCROOT}/../Domain/\" --sources \"${SRCROOT}/../Common\" --sources \"${SRCROOT}/../Data\" --sources \"${SRCROOT}/WeatherApp/Coordinators/\" --sources \"${SRCROOT}/WeatherApp/Features/\" --sources \"${SRCROOT}/WeatherApp/Plugins/\" --templates \"${SRCROOT}/../Sourcery/Templates\" --output \"${SRCROOT}/../Sourcery/Generated\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -648,7 +698,9 @@
 				E71BE6D223A3159C00F33E07 /* Location.swift in Sources */,
 				E71BE6D423A315A500F33E07 /* Temperature.swift in Sources */,
 				E78AB03A23A2756B005A4A16 /* WeatherClient.swift in Sources */,
+				E71BE71523A60ECC00F33E07 /* AutoMockable.generated.swift in Sources */,
 				E71BE6E923A4CF1C00F33E07 /* SearchViewController.swift in Sources */,
+				E71BE71823A60EE400F33E07 /* SourceryProtocols.swift in Sources */,
 				E71BE6EB23A4D29F00F33E07 /* UIViewController.swift in Sources */,
 				E71BE6F723A5CDC100F33E07 /* Persistence.swift in Sources */,
 				E78AB03323A25F66005A4A16 /* UseCase.swift in Sources */,

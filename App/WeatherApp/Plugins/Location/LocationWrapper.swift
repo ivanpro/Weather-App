@@ -16,7 +16,7 @@ enum UserLocationResult: Equatable {
     case error
 }
 
-protocol LocationInterface {
+protocol LocationInterface: AutoMockable {
     typealias CancelHandler = () -> Void
     func getUserLocation(onCompletion: @escaping (UserLocationResult) -> Void) -> CancelHandler?
 }

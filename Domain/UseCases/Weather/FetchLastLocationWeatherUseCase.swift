@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol FetchLastLocationWeatherUseCaseInterface {
+protocol FetchLastLocationWeatherUseCaseInterface: AutoMockable {
     func execute() -> Bool
 
     var delegate: FetchLastLocationWeatherUseCaseDelegate? { get set }

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol SearchCoordinatorInterface: Coordinator {}
+protocol SearchCoordinatorInterface: Coordinator, AutoMockable {}
 
 final class SearchCoordinator: SearchCoordinatorInterface {
     var navigationController: UINavigationController

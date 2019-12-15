@@ -9,7 +9,7 @@
 import Foundation
 import CoreLocation
 
-protocol CurrentUserLocationUseCaseInterface {
+protocol CurrentUserLocationUseCaseInterface: AutoMockable {
     func execute() -> (() -> Void)?
 
     var delegate: CurrentUserLocationUseCaseDelegate? { get set }

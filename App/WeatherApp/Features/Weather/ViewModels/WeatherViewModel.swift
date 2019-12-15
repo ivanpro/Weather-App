@@ -9,7 +9,7 @@
 import Foundation
 import CoreLocation
 
-protocol WeatherViewModelInterface {
+protocol WeatherViewModelInterface: AutoMockable {
     func viewDidLoad()
     func viewDidDisappear()
     func tryAgainPressed()
