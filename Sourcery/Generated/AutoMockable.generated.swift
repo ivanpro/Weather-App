@@ -140,6 +140,39 @@ return executeClosure.map({ $0() }) ?? executeReturnValue
 }
 
 }
+class FetchWeatherForCoordinateUseCaseDelegateMock: FetchWeatherForCoordinateUseCaseDelegate {
+
+//MARK: - successWeatherResponseForLocation
+
+var successWeatherResponseForLocationCallsCount = 0
+var successWeatherResponseForLocationCalled: Bool {
+return successWeatherResponseForLocationCallsCount > 0
+}
+var successWeatherResponseForLocationReceivedWeather: Weather?
+var successWeatherResponseForLocationClosure: ((Weather) -> Void)?
+
+func successWeatherResponseForLocation(_ weather: Weather) {
+successWeatherResponseForLocationCallsCount += 1
+successWeatherResponseForLocationReceivedWeather = weather
+successWeatherResponseForLocationClosure?(weather)
+}
+
+//MARK: - failedWeatherResponseForLocation
+
+var failedWeatherResponseForLocationCallsCount = 0
+var failedWeatherResponseForLocationCalled: Bool {
+return failedWeatherResponseForLocationCallsCount > 0
+}
+var failedWeatherResponseForLocationReceivedErrorMessage: String?
+var failedWeatherResponseForLocationClosure: ((String) -> Void)?
+
+func failedWeatherResponseForLocation(_ errorMessage: String) {
+failedWeatherResponseForLocationCallsCount += 1
+failedWeatherResponseForLocationReceivedErrorMessage = errorMessage
+failedWeatherResponseForLocationClosure?(errorMessage)
+}
+
+}
 class FetchWeatherForCoordinateUseCaseMock: FetchWeatherForCoordinateUseCaseInterface {
 var delegate: FetchWeatherForCoordinateUseCaseDelegate?
 
