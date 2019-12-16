@@ -13,7 +13,6 @@ protocol WeatherCoordinatorInterface: Coordinator, AutoMockable {}
 
 enum WeatherCoordinatorChild: Equatable {
     case search
-    case recent
 }
 
 final class WeatherCoordinator: AppCoordinatorInterface {

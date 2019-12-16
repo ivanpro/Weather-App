@@ -37,6 +37,9 @@
 		E7752BE423A2348C00D39364 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7752BE323A2348C00D39364 /* AppCoordinator.swift */; };
 		E7752BE723A23C5400D39364 /* WeatherCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7752BE623A23C5400D39364 /* WeatherCoordinator.swift */; };
 		E7752BED23A23D5900D39364 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7752BEC23A23D5900D39364 /* WeatherViewModel.swift */; };
+		E77F5A2223A72274001D0A85 /* AppCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77F5A2123A72274001D0A85 /* AppCoordinatorTests.swift */; };
+		E77F5A2423A723F4001D0A85 /* SearchCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77F5A2323A723F3001D0A85 /* SearchCoordinatorTests.swift */; };
+		E77F5A2623A724BD001D0A85 /* WeatherCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E77F5A2523A724BD001D0A85 /* WeatherCoordinatorTests.swift */; };
 		E78080C123A64B760058BDB6 /* sample_successful_request.fixture in Resources */ = {isa = PBXBuildFile; fileRef = E70F0A1123A64702000DD912 /* sample_successful_request.fixture */; };
 		E78080C523A651770058BDB6 /* CurrentUserLocationUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78080C423A651770058BDB6 /* CurrentUserLocationUseCaseTests.swift */; };
 		E78080C723A656530058BDB6 /* FetchLastLocationWeatherUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78080C623A656530058BDB6 /* FetchLastLocationWeatherUseCaseTests.swift */; };
@@ -112,6 +115,9 @@
 		E7752BE323A2348C00D39364 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		E7752BE623A23C5400D39364 /* WeatherCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCoordinator.swift; sourceTree = "<group>"; };
 		E7752BEC23A23D5900D39364 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
+		E77F5A2123A72274001D0A85 /* AppCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinatorTests.swift; sourceTree = "<group>"; };
+		E77F5A2323A723F3001D0A85 /* SearchCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCoordinatorTests.swift; sourceTree = "<group>"; };
+		E77F5A2523A724BD001D0A85 /* WeatherCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCoordinatorTests.swift; sourceTree = "<group>"; };
 		E78080C423A651770058BDB6 /* CurrentUserLocationUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUserLocationUseCaseTests.swift; sourceTree = "<group>"; };
 		E78080C623A656530058BDB6 /* FetchLastLocationWeatherUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLastLocationWeatherUseCaseTests.swift; sourceTree = "<group>"; };
 		E78080C823A6599C0058BDB6 /* FetchWeatherForCoordinateUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchWeatherForCoordinateUseCaseTests.swift; sourceTree = "<group>"; };
@@ -447,6 +453,16 @@
 			path = ViewControllers;
 			sourceTree = "<group>";
 		};
+		E77F5A2023A72258001D0A85 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				E77F5A2123A72274001D0A85 /* AppCoordinatorTests.swift */,
+				E77F5A2323A723F3001D0A85 /* SearchCoordinatorTests.swift */,
+				E77F5A2523A724BD001D0A85 /* WeatherCoordinatorTests.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
 		E78080C223A6513D0058BDB6 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
@@ -486,6 +502,7 @@
 		E78080E123A669430058BDB6 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				E77F5A2023A72258001D0A85 /* Coordinators */,
 				E78080E223A669490058BDB6 /* Plugins */,
 			);
 			path = App;
@@ -871,6 +888,7 @@
 				E78080DC23A666ED0058BDB6 /* TemperatureTests.swift in Sources */,
 				E78080C723A656530058BDB6 /* FetchLastLocationWeatherUseCaseTests.swift in Sources */,
 				E71BE72023A63C1100F33E07 /* WeatherRepositoryTests.swift in Sources */,
+				E77F5A2423A723F4001D0A85 /* SearchCoordinatorTests.swift in Sources */,
 				E78080CF23A6619D0058BDB6 /* RemoveStoredLocationUseCaseTests.swift in Sources */,
 				E78080D523A664580058BDB6 /* StoreSearchedLocationUseCaseTests.swift in Sources */,
 				E78080DA23A666620058BDB6 /* LocationTests.swift in Sources */,
@@ -880,7 +898,9 @@
 				E78080E023A668B40058BDB6 /* WindTests.swift in Sources */,
 				E78080CD23A65FC80058BDB6 /* GetWeatherIconForLocationUseCaseTests.swift in Sources */,
 				E78080C923A6599C0058BDB6 /* FetchWeatherForCoordinateUseCaseTests.swift in Sources */,
+				E77F5A2623A724BD001D0A85 /* WeatherCoordinatorTests.swift in Sources */,
 				E70F0A1423A64756000DD912 /* Fixture.swift in Sources */,
+				E77F5A2223A72274001D0A85 /* AppCoordinatorTests.swift in Sources */,
 				E78080C523A651770058BDB6 /* CurrentUserLocationUseCaseTests.swift in Sources */,
 				E78080E523A669660058BDB6 /* PersistenceTests.swift in Sources */,
 				E78080CB23A65BCC0058BDB6 /* FetchWeatherForLocationUseCaseTests.swift in Sources */,
