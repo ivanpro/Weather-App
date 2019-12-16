@@ -39,7 +39,7 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
 
     lazy var weatherImage: UIImageView = {
         let image = UIImageView()
-        image.backgroundColor = .white
+        image.backgroundColor = UIColor(white: 0.85, alpha: 1.0)
         image.layer.cornerRadius = 30.0
         image.layer.masksToBounds = true
         return image

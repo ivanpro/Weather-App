@@ -62,18 +62,7 @@ final class WeatherClient: WeatherClientInterface {
 
         network.request(url, method: .get, parameters: nil, encoding: URLEncoding.queryString, headers: nil)
             .response(queue: DispatchQueue.main, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { [weak self] (dataResponse: DataResponse<Data>) in
-                guard let imageData = dataResponse.result.value else {
-
-                    self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
-                    return
-                }
-
-                // Cache the image
-                if let request = dataResponse.request, let image = self?.convertImageData(imageData) {
-                    self?.imageCache.add(image, for: request)
-                }
-
-                onSuccess?(imageData)
+                self?.parseIconResponse(dataResponse: dataResponse, onSuccess: onSuccess, onError: onError)
             })
     }
 }
@@ -82,15 +71,27 @@ extension WeatherClient {
     // MARK: - Helpers
     func fetchImageFromCache(for requestUrl: String) -> Data? {
         guard let url = URL(string: requestUrl),
-            let image = imageCache.image(for: URLRequest(url: url)),
-
-            let data = image.jpegData(compressionQuality: 70.0) else { return nil}
+            let image = imageCache.image(for: URLRequest(url: url)), let data = image.jpegData(compressionQuality: 70.0) else { return nil }
 
         return data
     }
 
     func convertImageData(_ imageData: Data) -> Image? {
         return Image(data: imageData)
+    }
+
+    func parseIconResponse(dataResponse: DataResponse<Data>, onSuccess: ((Data) -> Void)?, onError: HttpErrorClosure?) {
+        guard let imageData = dataResponse.result.value else {
+            parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
+            return
+        }
+
+        // Cache the image
+        if let request = dataResponse.request, let image = convertImageData(imageData) {
+            imageCache.add(image, for: request)
+        }
+
+        onSuccess?(imageData)
     }
 
     func parseResponse(response: DataResponse<Data>, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {

@@ -21,4 +21,16 @@ class Fixture {
             fatalError("Invalid path for \(fixture)")
         }
     }
+
+    static func toData(_ fixture: String) -> Data {
+        if let file = Bundle.main.url(forResource: fixture, withExtension: ".fixture") {
+            do {
+                return try Data(contentsOf: file, options: .alwaysMapped)
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        } else {
+            fatalError("Invalid path for \(fixture)")
+        }
+    }
 }
