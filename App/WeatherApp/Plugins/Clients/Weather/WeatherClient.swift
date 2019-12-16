@@ -8,12 +8,31 @@
 
 import Alamofire
 import AlamofireImage
+import EnvelopeNetwork
 
 final class WeatherClient: WeatherClientInterface {
     let imageCache = AutoPurgingImageCache(
         memoryCapacity: 100_000_000,
         preferredMemoryUsageAfterPurge: 60_000_000
     )
+
+    private let network: Networking
+    private let configuration: Configuration
+
+    struct Configuration {
+        let endpointUrl: URL
+        static func defaultConfiguration() -> Configuration {
+            return Configuration(
+                endpointUrl: URL(string: String(format: Endpoints.weather, ""))!
+            )
+        }
+    }
+
+    init(network: Networking = AlamofireNetwork(alamofireSessionManager: SessionManager.default),
+         configuration: Configuration = Configuration.defaultConfiguration()) {
+        self.network = network
+        self.configuration = configuration
+    }
 
     func fetchWatherForLocation(_ location: String, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
         let url = String(format: Endpoints.weather, location)
@@ -26,9 +45,10 @@ final class WeatherClient: WeatherClientInterface {
     }
 
     func fetchWeather(for url: String, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
-        request(url).responseJSON { [weak self] dataResponse in
-            self?.parseResponse(response: dataResponse, onSuccess: onSuccess, onError: onError)
-        }
+        network.request(url, method: .get, parameters: nil, encoding: URLEncoding.queryString, headers: nil)
+            .response(queue: DispatchQueue.main, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { [weak self] (dataResponse: DataResponse<Data>) in
+                self?.parseResponse(response: dataResponse, onSuccess: onSuccess, onError: onError)
+            })
     }
 
     func fetchIconForWeather(_ iconId: String, onSuccess: ((Data) -> Void)?, onError: HttpErrorClosure?) {
@@ -40,24 +60,21 @@ final class WeatherClient: WeatherClientInterface {
             return
         }
 
-        request(url).responseImage { [weak self] dataResponse in
-            guard let image = dataResponse.result.value else {
-                self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
-                return
-            }
+        network.request(url, method: .get, parameters: nil, encoding: URLEncoding.queryString, headers: nil)
+            .response(queue: DispatchQueue.main, responseSerializer: DataRequest.dataResponseSerializer(), completionHandler: { [weak self] (dataResponse: DataResponse<Data>) in
+                guard let imageData = dataResponse.result.value else {
 
-            guard let data = self?.convertImageData(image) else {
-                self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
-                return
-            }
+                    self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
+                    return
+                }
 
-            // Cache the image
-            if let request = dataResponse.request {
-                self?.imageCache.add(image, for: request)
-            }
+                // Cache the image
+                if let request = dataResponse.request, let image = self?.convertImageData(imageData) {
+                    self?.imageCache.add(image, for: request)
+                }
 
-            onSuccess?(data)
-        }
+                onSuccess?(imageData)
+            })
     }
 }
 
@@ -66,16 +83,18 @@ extension WeatherClient {
     func fetchImageFromCache(for requestUrl: String) -> Data? {
         guard let url = URL(string: requestUrl),
             let image = imageCache.image(for: URLRequest(url: url)),
-            let data = convertImageData(image) else { return nil}
+
+            let data = image.jpegData(compressionQuality: 70.0) else { return nil}
 
         return data
     }
 
-    func convertImageData(_ image: Image) -> Data? {
-        return image.jpegData(compressionQuality: 70.0)
+    func convertImageData(_ imageData: Data) -> Image? {
+        return Image(data: imageData)
     }
 
-    func parseResponse(response: DataResponse<Any>, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
+    func parseResponse(response: DataResponse<Data>, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
+
         guard response.error == nil else {
             self.parseErrorResponse(error: response.error?.localizedDescription, onError: onError)
             return

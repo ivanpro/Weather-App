@@ -39,7 +39,7 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
 
     lazy var weatherImage: UIImageView = {
         let image = UIImageView()
-        image.backgroundColor = .clear
+        image.backgroundColor = .white
         image.layer.cornerRadius = 30.0
         image.layer.masksToBounds = true
         return image
@@ -130,7 +130,7 @@ extension WeatherViewController {
     func setTemperatureLabelConstraints() {
         temperatureLabel.snp.makeConstraints { make -> Void in
             make.height.equalTo(100.0)
-            make.width.equalTo(100.0)
+            make.width.equalTo(150.0)
             make.leadingMargin.equalTo(30.0)
             make.top.equalTo(locationLabel.snp_bottomMargin).offset(Dimensions.margin)
         }
