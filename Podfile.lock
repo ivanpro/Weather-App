@@ -5,6 +5,8 @@ PODS:
   - AlamofireNetworkActivityIndicator (2.4.0):
     - Alamofire (~> 4.8)
   - Dwifft (0.9)
+  - EnvelopeNetwork (0.0.1):
+    - Alamofire (~> 4.5)
   - SnapKit (5.0.1)
   - Sourcery (0.17.0)
 
@@ -13,6 +15,7 @@ DEPENDENCIES:
   - AlamofireImage (= 3.6.0)
   - AlamofireNetworkActivityIndicator (= 2.4.0)
   - Dwifft (= 0.9)
+  - EnvelopeNetwork (from `https://github.com/ivanmisuno/Envelope.git`)
   - SnapKit (= 5.0.1)
   - Sourcery (= 0.17.0)
 
@@ -25,14 +28,24 @@ SPEC REPOS:
     - SnapKit
     - Sourcery
 
+EXTERNAL SOURCES:
+  EnvelopeNetwork:
+    :git: https://github.com/ivanmisuno/Envelope.git
+
+CHECKOUT OPTIONS:
+  EnvelopeNetwork:
+    :commit: 9693688b7930c95df8ef7a5e60a32a035fcaf4a2
+    :git: https://github.com/ivanmisuno/Envelope.git
+
 SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   AlamofireImage: be9963c6582d68b39e89191f64c82a7d7bf40fdd
   AlamofireNetworkActivityIndicator: 9acc3de3ca6645bf0efed462396b0df13dd3e7b8
   Dwifft: 42912068ed2a8146077d1a1404df18625bd086e1
+  EnvelopeNetwork: 3eb271c77f1b1472d7859a56bee150e10b719c50
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Sourcery: 3ed61be7c8a1218fce349266139379dba477efe0
 
-PODFILE CHECKSUM: 59f5367e13c7fb54f247331e0392995794c7d2f6
+PODFILE CHECKSUM: ac717648fc046a1216fc6302a325c08d63689527
 
 COCOAPODS: 1.8.4

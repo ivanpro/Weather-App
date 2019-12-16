@@ -13,4 +13,5 @@ target 'WeatherApp' do
    pod 'SnapKit', '5.0.1'
    pod 'Dwifft', '0.9'
    pod 'Sourcery', '0.17.0'
+   pod 'EnvelopeNetwork', :git => "https://github.com/ivanmisuno/Envelope.git"
 end
