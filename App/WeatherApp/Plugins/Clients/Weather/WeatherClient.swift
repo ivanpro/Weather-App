@@ -15,9 +15,6 @@ final class WeatherClient: WeatherClientInterface {
         preferredMemoryUsageAfterPurge: 60_000_000
     )
 
-    private let fetchQueue: DispatchQueue = DispatchQueue(label: "com.vitorll.weather_repository_fetch_queue", qos: .utility, attributes: .concurrent)
-    private let iconQueue: DispatchQueue = DispatchQueue(label: "com.vitorll.weather_repository_icon_queue", qos: .utility, attributes: .concurrent)
-
     func fetchWatherForLocation(_ location: String, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
         let url = String(format: Endpoints.weather, location)
         fetchWeather(for: url, onSuccess: onSuccess, onError: onError)
@@ -29,12 +26,8 @@ final class WeatherClient: WeatherClientInterface {
     }
 
     func fetchWeather(for url: String, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
-        fetchQueue.async {
-            request(url).responseJSON { [weak self] dataResponse in
-                DispatchQueue.main.async {
-                    self?.parseResponse(response: dataResponse, onSuccess: onSuccess, onError: onError)
-                }
-            }
+        request(url).responseJSON { [weak self] dataResponse in
+            self?.parseResponse(response: dataResponse, onSuccess: onSuccess, onError: onError)
         }
     }
 
@@ -47,25 +40,23 @@ final class WeatherClient: WeatherClientInterface {
             return
         }
 
-        iconQueue.async {
-            request(url).responseImage { [weak self] dataResponse in
-                guard let image = dataResponse.result.value else {
-                    self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
-                    return
-                }
-
-                guard let data = self?.convertImageData(image) else {
-                    self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
-                    return
-                }
-
-                // Cache the image
-                if let request = dataResponse.request {
-                    self?.imageCache.add(image, for: request)
-                }
-
-                onSuccess?(data)
+        request(url).responseImage { [weak self] dataResponse in
+            guard let image = dataResponse.result.value else {
+                self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
+                return
             }
+
+            guard let data = self?.convertImageData(image) else {
+                self?.parseErrorResponse(error: dataResponse.error?.localizedDescription, onError: onError)
+                return
+            }
+
+            // Cache the image
+            if let request = dataResponse.request {
+                self?.imageCache.add(image, for: request)
+            }
+
+            onSuccess?(data)
         }
     }
 }
@@ -85,24 +76,22 @@ extension WeatherClient {
     }
 
     func parseResponse(response: DataResponse<Any>, onSuccess: ((JSONDictionary) -> Void)?, onError: HttpErrorClosure?) {
-        DispatchQueue.main.async {
-            guard response.error == nil else {
-                self.parseErrorResponse(error: response.error?.localizedDescription, onError: onError)
-                return
-            }
-
-            guard let data = response.data, let json = try? JSONSerialization.jsonObject(with: data, options: [.allowFragments]) as? JSONDictionary else {
-                self.parseErrorResponse(error: "Failed to parse JSON object", onError: onError)
-                return
-            }
-
-            guard json.string(forKey: "cod") != "200", let message = json.string(forKey: "message") else {
-                self.parseSuccessResponse(json, onSuccess: onSuccess)
-                return
-            }
-
-            onError?(message)
+        guard response.error == nil else {
+            self.parseErrorResponse(error: response.error?.localizedDescription, onError: onError)
+            return
         }
+
+        guard let data = response.data, let json = try? JSONSerialization.jsonObject(with: data, options: [.allowFragments]) as? JSONDictionary else {
+            self.parseErrorResponse(error: "Failed to parse JSON object", onError: onError)
+            return
+        }
+
+        guard json.string(forKey: "cod") != "200", let message = json.string(forKey: "message") else {
+            self.parseSuccessResponse(json, onSuccess: onSuccess)
+            return
+        }
+
+        onError?(message)
     }
 
     func parseSuccessResponse(_ response: JSONDictionary, onSuccess: ((JSONDictionary) -> Void)?) {

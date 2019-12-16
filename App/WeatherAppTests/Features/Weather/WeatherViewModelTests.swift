@@ -134,7 +134,7 @@ class WeatherViewModelTests: XCTestCase {
 
         XCTAssertEqual(delegate.stopAnimatingIndicatorCallsCount, 1)
         XCTAssertEqual(delegate.updateLocaleLabelWithReceivedText, "London - GB")
-        XCTAssertEqual(delegate.updateTemperatureLabelWithReceivedText, "286.0")
+        XCTAssertEqual(delegate.updateTemperatureLabelWithReceivedText, "286.0ºC")
         XCTAssertEqual(getIconUseCase.executeReceivedInput, "10n")
     }
 
@@ -180,7 +180,7 @@ class WeatherViewModelTests: XCTestCase {
 
         XCTAssertEqual(delegate.stopAnimatingIndicatorCallsCount, 1)
         XCTAssertEqual(delegate.updateLocaleLabelWithReceivedText, "London - GB")
-        XCTAssertEqual(delegate.updateTemperatureLabelWithReceivedText, "286.0")
+        XCTAssertEqual(delegate.updateTemperatureLabelWithReceivedText, "286.0ºC")
         XCTAssertEqual(getIconUseCase.executeReceivedInput, "10n")
     }
 
