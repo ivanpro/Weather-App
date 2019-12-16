@@ -19,7 +19,6 @@ final class SearchViewController: UIViewController, SearchViewControllerInterfac
         let textField = UITextField()
         textField.delegate = self
         textField.placeholder = "Enter a City or Zip code"
-        textField.backgroundColor = .lightGray
         textField.enablesReturnKeyAutomatically = true
         textField.returnKeyType = .search
         textField.font = UIFont(name: "Arial", size: 22.0)
@@ -85,7 +84,6 @@ extension SearchViewController {
     }
 
     func setTableViewConstraints() {
-        tableView.backgroundColor = .yellow
         tableView.snp.makeConstraints { make in
             make.topMargin.equalTo(searchTextField.snp_bottomMargin).offset(Dimensions.margin * 2)
             make.leading.trailing.bottom.equalTo(view)

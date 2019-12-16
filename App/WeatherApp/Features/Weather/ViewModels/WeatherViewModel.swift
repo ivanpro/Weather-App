@@ -130,7 +130,7 @@ extension WeatherViewModel: FetchLastLocationWeatherUseCaseDelegate {
         }
 
         if let temperature = weahter.temperature?.temp.rounded() {
-            delegate?.updateTemperatureLabel(with: "\(temperature)")
+            delegate?.updateTemperatureLabel(with: "\(temperature)ºC")
         }
     }
 
@@ -156,6 +156,7 @@ extension WeatherViewModel: CurrentUserLocationUseCaseDelegate {
     }
 
     func failedToAcquireUserLocation(errorMessage: String) {
+        delegate?.stopAnimatingIndicator()
         delegate?.failedToLocateUser(errorMessage)
     }
 }

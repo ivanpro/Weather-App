@@ -15,6 +15,12 @@ protocol WeatherViewControllerInterface {}
 final class WeatherViewController: UIViewController, WeatherViewControllerInterface {
     var viewModel: WeatherViewModelInterface
 
+    lazy var backgroundImageView: UIImageView = {
+        let imageView = UIImageView(image: #imageLiteral(resourceName: "weather_background.png"))
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+
     lazy var locationLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.textAlignment = .center
@@ -34,6 +40,8 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
     lazy var weatherImage: UIImageView = {
         let image = UIImageView()
         image.backgroundColor = .clear
+        image.layer.cornerRadius = 30.0
+        image.layer.masksToBounds = true
         return image
     }()
 
@@ -44,7 +52,7 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
     }()
 
     lazy var gpsButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(gpsPressed))
+        let button = UIBarButtonItem(image: #imageLiteral(resourceName: "gps_icon.pdf"), style: .plain, target: self, action: #selector(gpsPressed))
         button.tintColor = Theme.color
         return button
     }()
@@ -73,7 +81,7 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-//        viewModel.viewDidDisappear()
+        viewModel.viewDidDisappear()
         super.viewDidDisappear(animated)
     }
 }
@@ -81,7 +89,7 @@ final class WeatherViewController: UIViewController, WeatherViewControllerInterf
 extension WeatherViewController {
     // MARK: - UI Setup
     func buildUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(red: (73/255), green: (183/255), blue: (232/255), alpha: 1.0)
         addSubviews()
         setConstraints()
     }
@@ -89,6 +97,7 @@ extension WeatherViewController {
     func addSubviews() {
         navigationItem.setRightBarButton(searchButton, animated: false)
         navigationItem.setLeftBarButton(gpsButton, animated: false)
+        view.addSubview(backgroundImageView)
         view.addSubview(locationLabel)
         view.addSubview(temperatureLabel)
         view.addSubview(weatherImage)
@@ -96,14 +105,20 @@ extension WeatherViewController {
     }
 
     func setConstraints() {
+        setBackgroundImageConstraints()
         setTemperatureLabelConstraints()
         setLocationLabelConstraints()
         setWeatherImageConstraints()
         setActivityIndicatorConstraints()
     }
 
+    func setBackgroundImageConstraints() {
+        backgroundImageView.snp.makeConstraints { make in
+            make.leading.top.trailing.bottom.equalTo(view)
+        }
+    }
+
     func setLocationLabelConstraints() {
-        locationLabel.backgroundColor = .lightGray
         locationLabel.snp.makeConstraints { make in
             make.height.equalTo(60.0)
             make.topMargin.equalTo(Dimensions.margin)
@@ -113,7 +128,6 @@ extension WeatherViewController {
     }
 
     func setTemperatureLabelConstraints() {
-        temperatureLabel.backgroundColor = .blue
         temperatureLabel.snp.makeConstraints { make -> Void in
             make.height.equalTo(100.0)
             make.width.equalTo(100.0)
@@ -123,7 +137,6 @@ extension WeatherViewController {
     }
 
     func setWeatherImageConstraints() {
-        weatherImage.backgroundColor = .yellow
         weatherImage.snp.makeConstraints { make in
             make.height.width.equalTo(100.0)
             make.trailingMargin.equalTo(-30.0)
