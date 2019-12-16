@@ -8,10 +8,6 @@
 
 import Foundation
 
-protocol SearchViewModelDataSourceDelegate: AnyObject {
-    func reloadTableWithRecentLocations(_ locations: [String])
-}
-
 protocol SearchViewModelDataSourceInterface: AutoMockable {
     func didSelectLocation(_ location: String)
     func didRemoveLocation(_ location: String)
@@ -25,7 +21,11 @@ protocol SearchViewModelInterface: SearchViewModelDataSourceInterface {
     var dataSourceDelegate: SearchViewModelDataSourceDelegate? { get set }
 }
 
-protocol SearchCoordinatorDelegate: AnyObject {
+protocol SearchViewModelDataSourceDelegate: AnyObject, AutoMockable {
+    func reloadTableWithRecentLocations(_ locations: [String])
+}
+
+protocol SearchCoordinatorDelegate: AnyObject, AutoMockable {
     func fetchWeatherForLocationSuccessful(_ weather: Weather)
     func fetchWeatherForLocationFailed(_ errorMessage: String)
 }

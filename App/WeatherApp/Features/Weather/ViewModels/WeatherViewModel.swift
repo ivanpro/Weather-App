@@ -23,7 +23,7 @@ protocol WeatherViewModelInterface: AutoMockable {
     var coordinatorDelegate: WeatherCoordinatorDelegate? { get set }
 }
 
-protocol WeatherViewModelDelegate: AnyObject {
+protocol WeatherViewModelDelegate: AnyObject, AutoMockable {
     func updateTemperatureLabel(with text: String)
     func updateLocaleLabel(with text: String)
     func requestFailed(with text: String)
@@ -35,7 +35,7 @@ protocol WeatherViewModelDelegate: AnyObject {
     func updateWeatherIcon(with imageData: Data)
 }
 
-protocol WeatherCoordinatorDelegate: AnyObject {
+protocol WeatherCoordinatorDelegate: AnyObject, AutoMockable {
     func presentSearchScreen()
 }
 
@@ -91,7 +91,6 @@ extension WeatherViewModel {
 extension WeatherViewModel {
     // MARK: - Coordinator Actions
     func loadWeather(_ weather: Weather) {
-        delegate?.stopAnimatingIndicator()
         successWeatherResponseForLocation(weather: weather)
     }
 

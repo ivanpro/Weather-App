@@ -461,6 +461,39 @@ return executeClosure.map({ $0() }) ?? executeReturnValue
 }
 
 }
+class SearchCoordinatorDelegateMock: SearchCoordinatorDelegate {
+
+//MARK: - fetchWeatherForLocationSuccessful
+
+var fetchWeatherForLocationSuccessfulCallsCount = 0
+var fetchWeatherForLocationSuccessfulCalled: Bool {
+return fetchWeatherForLocationSuccessfulCallsCount > 0
+}
+var fetchWeatherForLocationSuccessfulReceivedWeather: Weather?
+var fetchWeatherForLocationSuccessfulClosure: ((Weather) -> Void)?
+
+func fetchWeatherForLocationSuccessful(_ weather: Weather) {
+fetchWeatherForLocationSuccessfulCallsCount += 1
+fetchWeatherForLocationSuccessfulReceivedWeather = weather
+fetchWeatherForLocationSuccessfulClosure?(weather)
+}
+
+//MARK: - fetchWeatherForLocationFailed
+
+var fetchWeatherForLocationFailedCallsCount = 0
+var fetchWeatherForLocationFailedCalled: Bool {
+return fetchWeatherForLocationFailedCallsCount > 0
+}
+var fetchWeatherForLocationFailedReceivedErrorMessage: String?
+var fetchWeatherForLocationFailedClosure: ((String) -> Void)?
+
+func fetchWeatherForLocationFailed(_ errorMessage: String) {
+fetchWeatherForLocationFailedCallsCount += 1
+fetchWeatherForLocationFailedReceivedErrorMessage = errorMessage
+fetchWeatherForLocationFailedClosure?(errorMessage)
+}
+
+}
 class SearchCoordinatorMock: SearchCoordinatorInterface {
 
 //MARK: - start
@@ -474,6 +507,24 @@ var startClosure: (() -> Void)?
 func start() {
 startCallsCount += 1
 startClosure?()
+}
+
+}
+class SearchViewModelDataSourceDelegateMock: SearchViewModelDataSourceDelegate {
+
+//MARK: - reloadTableWithRecentLocations
+
+var reloadTableWithRecentLocationsCallsCount = 0
+var reloadTableWithRecentLocationsCalled: Bool {
+return reloadTableWithRecentLocationsCallsCount > 0
+}
+var reloadTableWithRecentLocationsReceivedLocations: [String]?
+var reloadTableWithRecentLocationsClosure: (([String]) -> Void)?
+
+func reloadTableWithRecentLocations(_ locations: [String]) {
+reloadTableWithRecentLocationsCallsCount += 1
+reloadTableWithRecentLocationsReceivedLocations = locations
+reloadTableWithRecentLocationsClosure?(locations)
 }
 
 }
@@ -674,6 +725,22 @@ fetchIconForWeatherOnSuccessOnErrorClosure?(iconId, onSuccess, onError)
 }
 
 }
+class WeatherCoordinatorDelegateMock: WeatherCoordinatorDelegate {
+
+//MARK: - presentSearchScreen
+
+var presentSearchScreenCallsCount = 0
+var presentSearchScreenCalled: Bool {
+return presentSearchScreenCallsCount > 0
+}
+var presentSearchScreenClosure: (() -> Void)?
+
+func presentSearchScreen() {
+presentSearchScreenCallsCount += 1
+presentSearchScreenClosure?()
+}
+
+}
 class WeatherCoordinatorMock: WeatherCoordinatorInterface {
 
 //MARK: - start
@@ -770,6 +837,110 @@ func fetchIconForWeather(_ iconName: String) {
 fetchIconForWeatherCallsCount += 1
 fetchIconForWeatherReceivedIconName = iconName
 fetchIconForWeatherClosure?(iconName)
+}
+
+}
+class WeatherViewModelDelegateMock: WeatherViewModelDelegate {
+
+//MARK: - updateTemperatureLabel
+
+var updateTemperatureLabelWithCallsCount = 0
+var updateTemperatureLabelWithCalled: Bool {
+return updateTemperatureLabelWithCallsCount > 0
+}
+var updateTemperatureLabelWithReceivedText: String?
+var updateTemperatureLabelWithClosure: ((String) -> Void)?
+
+func updateTemperatureLabel(with text: String) {
+updateTemperatureLabelWithCallsCount += 1
+updateTemperatureLabelWithReceivedText = text
+updateTemperatureLabelWithClosure?(text)
+}
+
+//MARK: - updateLocaleLabel
+
+var updateLocaleLabelWithCallsCount = 0
+var updateLocaleLabelWithCalled: Bool {
+return updateLocaleLabelWithCallsCount > 0
+}
+var updateLocaleLabelWithReceivedText: String?
+var updateLocaleLabelWithClosure: ((String) -> Void)?
+
+func updateLocaleLabel(with text: String) {
+updateLocaleLabelWithCallsCount += 1
+updateLocaleLabelWithReceivedText = text
+updateLocaleLabelWithClosure?(text)
+}
+
+//MARK: - requestFailed
+
+var requestFailedWithCallsCount = 0
+var requestFailedWithCalled: Bool {
+return requestFailedWithCallsCount > 0
+}
+var requestFailedWithReceivedText: String?
+var requestFailedWithClosure: ((String) -> Void)?
+
+func requestFailed(with text: String) {
+requestFailedWithCallsCount += 1
+requestFailedWithReceivedText = text
+requestFailedWithClosure?(text)
+}
+
+//MARK: - failedToLocateUser
+
+var failedToLocateUserCallsCount = 0
+var failedToLocateUserCalled: Bool {
+return failedToLocateUserCallsCount > 0
+}
+var failedToLocateUserReceivedErrorMessage: String?
+var failedToLocateUserClosure: ((String) -> Void)?
+
+func failedToLocateUser(_ errorMessage: String) {
+failedToLocateUserCallsCount += 1
+failedToLocateUserReceivedErrorMessage = errorMessage
+failedToLocateUserClosure?(errorMessage)
+}
+
+//MARK: - startAnimatingIndicator
+
+var startAnimatingIndicatorCallsCount = 0
+var startAnimatingIndicatorCalled: Bool {
+return startAnimatingIndicatorCallsCount > 0
+}
+var startAnimatingIndicatorClosure: (() -> Void)?
+
+func startAnimatingIndicator() {
+startAnimatingIndicatorCallsCount += 1
+startAnimatingIndicatorClosure?()
+}
+
+//MARK: - stopAnimatingIndicator
+
+var stopAnimatingIndicatorCallsCount = 0
+var stopAnimatingIndicatorCalled: Bool {
+return stopAnimatingIndicatorCallsCount > 0
+}
+var stopAnimatingIndicatorClosure: (() -> Void)?
+
+func stopAnimatingIndicator() {
+stopAnimatingIndicatorCallsCount += 1
+stopAnimatingIndicatorClosure?()
+}
+
+//MARK: - updateWeatherIcon
+
+var updateWeatherIconWithCallsCount = 0
+var updateWeatherIconWithCalled: Bool {
+return updateWeatherIconWithCallsCount > 0
+}
+var updateWeatherIconWithReceivedImageData: Data?
+var updateWeatherIconWithClosure: ((Data) -> Void)?
+
+func updateWeatherIcon(with imageData: Data) {
+updateWeatherIconWithCallsCount += 1
+updateWeatherIconWithReceivedImageData = imageData
+updateWeatherIconWithClosure?(imageData)
 }
 
 }
